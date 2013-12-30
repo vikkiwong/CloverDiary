@@ -1,6 +1,7 @@
 CloverDiary::Application.routes.draw do
 
   resources :wechat, :only => [:index, :create]
+  resources :messages, :only => [:index, :create]
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
