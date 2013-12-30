@@ -3,6 +3,8 @@ class MessagesController < ApplicationController
 	before_filter :check_wx_legality, :only => "create"
 
   def index
+  	puts "000000"
+  	get_questions(User.first, Date.today)
     render :text => params[:echostr]
   end
 
@@ -73,8 +75,9 @@ class MessagesController < ApplicationController
   # 查找用户某天的问题，若是查找当天且无问题记录，则创建
   def get_questions(user, date)
   	user_questions = UserQuestion.find_all_by_user_id_and_created_on(user.id, date)
-  	puts date == Date.today && user_questions.blank?
+  	puts "******"
   	if date == Date.today && user_questions.blank?
+  		puts "-------"
   		user_questions = []
   		questions = Question.find_questions(3)
   		puts questions
