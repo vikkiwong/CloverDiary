@@ -1,11 +1,12 @@
 # encoding: utf-8
 class WechatController < ApplicationController
 	before_filter :check_weixin_legality, :only => "create"
-	
+
   def index
     render :text => params[:echostr]
   end
 
+  # 接受微信发来的消息
   def create
   	if params[:xml][:MsgType] == "text" && params[:xml][:Content] == "hi"
   		@text = "欢迎！"
