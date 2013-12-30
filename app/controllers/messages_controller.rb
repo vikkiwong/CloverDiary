@@ -74,7 +74,7 @@ class MessagesController < ApplicationController
   def get_questions(user, date)
   	user_questions = UserQuestion.find_all_by_user_id_and_created_on(user.id, date)
   	puts date == Date.today && user_questions.blank?
-  	unless date == Date.today && user_questions.blank?
+  	if date == Date.today && user_questions.blank?
   		user_questions = []
   		questions = Question.find_questions(3)
   		puts questions
