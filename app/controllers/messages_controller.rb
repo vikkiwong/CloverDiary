@@ -43,31 +43,23 @@ class MessagesController < ApplicationController
   private
   # 处理微信消息
   def msg_handler(user, params)
-  	if params[:xml][:MsgType] == "text" && ["l", "1", "2", "3"].include?(params[:xml][:Content].downcase)  # 进入答题环节
-  		text_msg_handler(user, params[:xml][:Content].downcase) 
-  	else
-  		@text = "欢迎~"
-  		render "text", :formats => :xml
+    msg_type, content = params[:xml][:MsgType], params[:xml][:Content].downcase
+
+  	if msg_type == "text" && ["l", "1", "2", "3"].include?(content)  # 选题
+      questions = get_questions(user, Date.today)
+      if questions.present? && questions.count == 3
+        if content == "l"   # 今天的问题
+          @text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content
+        else
+          @text = questions[content.to_i - 1].content 
+        end
+      else
+        @text = "可能有什么地方出错了，待我检查检查~"
+      end
+    else
+  		@text = "这里应该保存回复~"
   	end
-  end
-
-  # 处理文本消息
-  def text_msg_handler(user, content)
-  	today = Date.today
-  	questions = get_questions(user, today)
-
-  	if questions.present? && questions.count == 3
-	  	if content == "l"   # 今天的问题
-		  	@text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content 
-	  	elsif ["1", "2", "3"].include?(content)
-	  		@text = questions[content.to_i].content 
-	  	else
-	  		@text = "do nothing"
-	  	end
-	  else
-	  	@text = "可能有什么地方出错了，待我检查检查~"
-	  end
-  	render "text", :formats => :xml
+    render "text", :formats => :xml
   end
 
   # 查找用户某天的问题，若是查找当天且无问题记录，则创建
