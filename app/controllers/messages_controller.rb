@@ -44,10 +44,11 @@ class MessagesController < ApplicationController
   # 处理微信消息
   def msg_handler(user, params)
   	case params[:xml][:MsgType]
-  	when "text"
+  	when "text" && ["l", "1", "2", "3"].include?(content)  # 进入答题环节
   		text_msg_handler(user, params[:xml][:Content].downcase)
   	else
-  		puts "do nothing"
+  		@text = "欢迎~"
+  		render "text", :formats => :xml
   	end
   end
 
@@ -55,6 +56,7 @@ class MessagesController < ApplicationController
   def text_msg_handler(user, content)
   	today = Date.today
   	user_questions = get_questions(user, today)
+
   	if user_questions.present? && user_questions.count == 3
 	  	if content == "l"   # 今天的问题
 		  	@text = "1、" + user_questions[0].content + "\n2、" + user_questions[1].content + "\n3、" + user_questions[2].content 
