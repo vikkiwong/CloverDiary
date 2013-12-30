@@ -35,16 +35,51 @@ class MessagesController < ApplicationController
   		Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
   			             :title => params[:xml][:Title], :description => params[:xml][:Description], :url => params[:xml][:Url], :msg_id => params[:xml][:MsgId])
   	end
-    
+
     # 处理消息
-    msg_handler(params)
+    msg_handler(user, params)
   end
 
   private
-  def msg_handler(params)
-   puts params
-   @text = "消息已保存~"	
-   render "text", :formats => :xml
+  # 处理微信消息
+  def msg_handler(user, params)
+  	case params[:xml][:MsgType]
+  	when "text"
+  		text_msg_handler(user, params[:xml][:Content].downcase)
+  	else
+  		puts "do nothing"
+  	end
+  end
+
+  # 处理文本消息
+  def text_msg_handler(user, content)
+  	today = Date.today
+  	user_questions = get_questions(user, today)
+  	if user_questions.present? && user_questions.count == 3
+	  	if content == "l"   # 今天的问题
+		  	@text = "1、" + user_questions[0].content + "\n2、" + user_questions[1].content + "\n3、" + user_questions[2].content 
+	  	elsif ["1", "2", "3"].include?(content)
+	  		@text = user_questions[content.to_i].content 
+	  	else
+	  		@text = "do nothing"
+	  	end
+	  else
+	  	@text = "可能有什么地方出错了，待我检查检查~"
+	  end
+  	render "text", :formats => :xml
+  end
+
+  # 查找用户某天的问题，若是查找当天且无问题记录，则创建
+  def get_questions(user, date)
+  	user_questions = UserQuestion.find_all_by_user_id_and_created_on(:user_id => user.id, :created_on => date)
+  	unless date == Date.today && user_questions.present?
+  		user_questions = []
+  		questions = Question.random(3)
+  		questions.each do |q|
+  			user_questions << UserQuestion.create(:user_id => user.id, :question_id => q.id)
+  		end if questions.present? 
+  	end
+  	user_questions
   end
 
   def check_wx_legality
