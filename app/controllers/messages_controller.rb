@@ -73,10 +73,11 @@ class MessagesController < ApplicationController
   # 查找用户某天的问题，若是查找当天且无问题记录，则创建
   def get_questions(user, date)
   	user_questions = UserQuestion.find_all_by_user_id_and_created_on(user.id, date)
-  	puts user_questions, date == Date.today
+  	puts date == Date.today && user_questions.blank?
   	unless date == Date.today && user_questions.blank?
   		user_questions = []
   		questions = Question.find_questions(3)
+  		puts questions
   		questions.each do |q|
   			user_questions << UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
   			puts user_questions
