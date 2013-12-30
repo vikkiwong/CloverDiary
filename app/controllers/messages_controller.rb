@@ -75,7 +75,7 @@ class MessagesController < ApplicationController
   	user_questions = UserQuestion.find_all_by_user_id_and_created_on(user.id, date)
   	unless date == Date.today && user_questions.present?
   		user_questions = []
-  		questions = Question.random(3)
+  		questions = Question.find_questions(3)
   		questions.each do |q|
   			user_questions << UserQuestion.create(:user_id => user.id, :question_id => q.id)
   		end if questions.present? 
