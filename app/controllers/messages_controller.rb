@@ -78,7 +78,7 @@ class MessagesController < ApplicationController
   		user_questions = []
   		questions = Question.find_questions(3)
   		questions.each do |q|
-  			user_questions << UserQuestion.create(:user_id => user.id, :question_id => q.id)
+  			user_questions << UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
   			puts user_questions
   		end if questions.present? 
   	end
