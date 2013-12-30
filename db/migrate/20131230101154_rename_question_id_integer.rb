@@ -1,4 +1,4 @@
-class RenameQuestionIdIntegerIn < ActiveRecord::Migration
+class RenameQuestionIdInteger < ActiveRecord::Migration
   def up
   	rename_column :user_questions, :question_id_integer, :question_id
   end
