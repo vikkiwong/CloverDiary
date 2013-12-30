@@ -71,7 +71,7 @@ class MessagesController < ApplicationController
 
   # 查找用户某天的问题，若是查找当天且无问题记录，则创建
   def get_questions(user, date)
-  	user_questions = UserQuestion.find_all_by_user_id_and_created_on(:user_id => user.id, :created_on => date)
+  	user_questions = UserQuestion.find_all_by_user_id_and_created_on(user.id, date)
   	unless date == Date.today && user_questions.present?
   		user_questions = []
   		questions = Question.random(3)
