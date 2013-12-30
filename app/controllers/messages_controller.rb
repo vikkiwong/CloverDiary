@@ -3,8 +3,6 @@ class MessagesController < ApplicationController
 	before_filter :check_wx_legality, :only => "create"
 
   def index
-  	puts "000000"
-  	get_questions(User.first, Date.today)
     render :text => params[:echostr]
   end
 
@@ -56,13 +54,13 @@ class MessagesController < ApplicationController
   # 处理文本消息
   def text_msg_handler(user, content)
   	today = Date.today
-  	user_questions = get_questions(user, today)
+  	questions = get_questions(user, today)
 
-  	if user_questions.present? && user_questions.count == 3
+  	if questions.present? && questions.count == 3
 	  	if content == "l"   # 今天的问题
-		  	@text = "1、" + user_questions[0].content + "\n2、" + user_questions[1].content + "\n3、" + user_questions[2].content 
+		  	@text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content 
 	  	elsif ["1", "2", "3"].include?(content)
-	  		@text = user_questions[content.to_i].content 
+	  		@text = questions[content.to_i].content 
 	  	else
 	  		@text = "do nothing"
 	  	end
@@ -74,19 +72,16 @@ class MessagesController < ApplicationController
 
   # 查找用户某天的问题，若是查找当天且无问题记录，则创建
   def get_questions(user, date)
-  	user_questions = UserQuestion.find_all_by_user_id_and_created_on(user.id, date)
-  	puts "******"
-  	if date == Date.today && user_questions.blank?
-  		puts "-------"
-  		user_questions = []
+  	question_ids = UserQuestion.find_all_by_user_id_and_created_on(user.id, date).collect(&:question_id)
+  	if date == Date.today && question_ids.blank?
   		questions = Question.find_questions(3)
-  		puts questions
   		questions.each do |q|
-  			user_questions << UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
-  			puts user_questions
+  			UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
   		end if questions.present? 
+  	else
+  		questions = Question.find_all_by_id(question_ids)
   	end
-  	user_questions
+  	questions
   end
 
   def check_wx_legality
