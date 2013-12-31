@@ -48,15 +48,19 @@ class MessagesController < ApplicationController
     questions = Question.get_questions(user, Date.today)
 
     # l：问题列表， 123：选题，n：下一题 w：提问 q：取消提问
-    if msg_type == "text" && content == "l"   # l：问题列表，
+    if msg_type == "text" && content == "h"   # l：问题列表，
+      @text = Message::Infos[:helpInfo]
+    elsif msg_type == "text" && content == "l"   # l：问题列表，
       # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
+      @text = "今天的问题是：\n"
       @text = Answer.get_answers_string(user, questions)
+      @text = "输入问题编号，选择要回答的问题\n输入【H】获得帮助信息"
 
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
       if wdquestions.present?
-        @text += "---------------\n我的自言自语\n"
+        @text += "\n我的自言自语\n---------------\n"
         @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
       @text += "\n\n" + SITE_DOMAIN + '/users/' + user.id.to_s
