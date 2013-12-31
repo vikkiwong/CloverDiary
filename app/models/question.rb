@@ -33,9 +33,9 @@ class Question < ActiveRecord::Base
   end
 
   # 用户对问题的回答
-  def user_msgs(user)
+  def user_msgs(user_id)
     date = Date.today
-    msg_ids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND question_id = #{self.id} AND created_at > #{date}").collect(&:message_id)
+    msg_ids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user_id} AND question_id = #{self.id} AND created_at > #{date}").collect(&:message_id)
     Message.find_all_by_id(msg_ids)
   end
 end
