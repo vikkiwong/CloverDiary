@@ -46,8 +46,9 @@ class Message < ActiveRecord::Base
     (last_choice_msg.content.to_i + n_counts) > 3  ? 0 : (last_choice_msg.content.to_i + n_counts)  # 当前选择的第几个题目
   end
 
+  # 本条微信消息发送前的最后一条消息
   def self.last_msg(user)
-    self.where(user_id: user.id).order("id desc").first    
+    self.where(user_id: user.id).order("id desc").offset(1).first    
   end
   
   # 12小时内发送过的内容为("1", "2", "3")的消息
