@@ -1,5 +1,5 @@
 <h3>今日记</h3>
-
+<hr>
 <% @questions.each do |q| %>
 	<h4><%= q.content %></h4>
 	<div style="padding-bottom:15px;">
@@ -10,6 +10,7 @@
 <% end if @questions.present? %>
 
 <h3>我的自言自语</h3>
+<hr>
 <% @wd_questions.each do |q| %>
 	<h4><%= q.content %></h4>
 	<div style="padding-bottom:15px;">
