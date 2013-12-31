@@ -96,7 +96,7 @@ class MessagesController < ApplicationController
 
   # 创建用户当天的n个问题
   def create_questions(user, n)
-    questions = Question.find_questions_by_random(3)
+    questions = Question.find_questions_by_random(user, 3)
     questions.each do |q|
       UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
     end if questions.present?   

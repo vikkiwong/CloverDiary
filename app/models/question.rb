@@ -11,8 +11,9 @@ class Question < ActiveRecord::Base
   scope :ordered, :order => "id DESC"
 
   # 随机n个问题
-  def self.find_questions_by_random(n)
-  	self.find_by_sql("SELECT * FROM questions order by rand() LIMIT #{n}")
+  # 只随机系统问题和自己创建的问题
+  def self.find_questions_by_random(user, n)
+  	self.find_by_sql("SELECT * FROM questions WHERE user_id = 0 OR user_id = #{user.id} order by rand() LIMIT #{n}")
   end
 
   # 查找用户某天的问题
