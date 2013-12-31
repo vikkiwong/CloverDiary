@@ -32,7 +32,7 @@ class Message < ActiveRecord::Base
     newQ: "给自己一个问题？请输入问题内容。\n输入【Q】取消编辑",
     alreadySave: "您的日记已保存，回复【N】进入下一题，否则继续回答本题~",
     wCancle: "已取消",
-    wSaved: "问题已保存，快点回答吧~"
+    wSaved: "问题已保存，快点回答吧~",
     wdSaved: "您的自问自答已经保存啦~，回复【L】查看问题列表"
   }
 
