@@ -4,7 +4,7 @@
 	<h4><%= q.content %></h4>
 	<div style="padding-bottom:15px;">
 		<% q.user_msgs(@user_id).each do |msg| %>
-			<p class="text-muted"><%= msg.content if message.present? %></p>
+			<p class="text-muted"><%= msg.content if msg.present? %></p>
 		<% end if q.user_msgs(@user_id).present? %>
 	</div>
 <% end if @questions.present? %>
@@ -14,7 +14,7 @@
 	<h4><%= q.content %></h4>
 	<div style="padding-bottom:15px;">
 		<% q.user_msgs(@user_id).each do |msg| %>
-			<p class="text-muted"><%= msg.content if message.present? %></p>
+			<p class="text-muted"><%= msg.content if msg.present? %></p>
 		<% end if q.user_msgs(@user_id).present? %>
 	</div>
 <% end if @wd_questions.present? %>
