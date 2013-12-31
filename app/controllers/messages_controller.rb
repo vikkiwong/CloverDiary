@@ -55,7 +55,7 @@ class MessagesController < ApplicationController
       questions = questions.present? ? questions : create_questions(user, 3)
       @text = "今天的问题是：\n"
       @text += Answer.get_answers_string(user, questions)
-      @text += "输入编号，选择要回答的问题\n输入【H】获得帮助信息"
+      
 
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
@@ -63,7 +63,10 @@ class MessagesController < ApplicationController
         @text += "\n\n我的自言自语\n---------------\n"
         @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
-      @text += "\n\n" + SITE_DOMAIN + '/users/' + user.id.to_s
+
+      @text += "\n\n输入编号，选择要回答的问题\n输入【H】获得帮助信息"
+      @text += "\n\n----这里是测试链接----\n"
+      @text += SITE_DOMAIN + '/users/' + user.id.to_s
       current_qid  = 0
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
