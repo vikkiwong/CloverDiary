@@ -55,12 +55,12 @@ class MessagesController < ApplicationController
       questions = questions.present? ? questions : create_questions(user, 3)
       @text = "今天的问题是：\n"
       @text += Answer.get_answers_string(user, questions)
-      @text += "输入问题编号，选择要回答的问题\n输入【H】获得帮助信息"
+      @text += "输入编号，选择要回答的问题\n输入【H】获得帮助信息"
 
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
       if wdquestions.present?
-        @text += "\n我的自言自语\n---------------\n"
+        @text += "\n\n我的自言自语\n---------------\n"
         @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
       @text += "\n\n" + SITE_DOMAIN + '/users/' + user.id.to_s

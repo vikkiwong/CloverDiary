@@ -30,7 +30,7 @@ class Message < ActiveRecord::Base
     isFinished:  "已经是最后一题了\n回复【L】查看列表", 
     unknowQ: "哎呀，出错了！\n回复【L】重新选择",
     newQ: "给自己一个问题？请输入问题内容。\n输入【Q】取消编辑",
-    saved: "已保存，你可以继续回答本题\n回复【N】进入下一题\n回复【L】重新选择",
+    saved: "已保存，回复【N】进入下一题，否则继续回答本题",
     wCancle: "已取消",
     wSaved: "问题已保存，可以开始回答了",
     wdSaved: "问答已经保存\n回复【L】查看列表",
