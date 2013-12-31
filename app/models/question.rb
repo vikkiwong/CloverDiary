@@ -27,11 +27,11 @@ class Question < ActiveRecord::Base
     question_ids = UserQuestion.find_all_by_user_id_and_created_on(user.id, date).collect(&:question_id)
     all_qids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND created_at > #{date} GROUP BY question_id").collect(&:question_id)
     wd_qids = all_qids.present? ? (all_qids - question_ids) : []
-    puts all_qids
+    p all_qids
     puts "-----"
-    puts question_ids
+    p question_ids
     puts "---"
-    puts wd_qids
+    p wd_qids
     Question.find_all_by_id(wd_qids)
   end
 
