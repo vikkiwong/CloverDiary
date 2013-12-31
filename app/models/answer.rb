@@ -12,7 +12,7 @@ class Answer < ActiveRecord::Base
   def self.get_answers_string(questions)
   	str = ""
   	questions.each_with_index do |q, i|
-  		str += (i+1).to_s + "、" + questions[0].content + "\n"
+  		str += (i+1).to_s + "、" + questions[i].content + "\n"
   	end if questions.present?
   	str
   end
@@ -20,7 +20,7 @@ class Answer < ActiveRecord::Base
   def self.get_wdanswers_string(questions)
   	str = ""
   	questions.each_with_index do |q, i|
-  		str += "Q：" + questions[0].content + "\n"
+  		str += "Q：" + questions[i].content + "\n"
   	end if questions.present?
   	str  	
   end
