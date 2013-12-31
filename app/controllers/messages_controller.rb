@@ -57,7 +57,7 @@ class MessagesController < ApplicationController
       wdquestions = Question.find_wdquestions(user, Date.today)
       if wdquestions.present?
         @text += "---------------\n我的自言自语\n"
-        @text += Answer.get_wdanswers_string(wdquestions) 
+        @text += Answer.get_wdanswers_string(user, Date.today, wdquestions) 
       end
 
       current_qid  = 0

@@ -24,7 +24,7 @@ class Answer < ActiveRecord::Base
   	str
   end
 
-  def self.get_wdanswers_string(questions)
+  def self.get_wdanswers_string(user, date, questions)
   	str = ""
   	questions.each_with_index do |q, i|
   		str += "Q：" + questions[i].content + "\n"
