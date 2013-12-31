@@ -1,6 +1,6 @@
 <% @questions.each do |q| %>
 	<p style='color:red;'><%= q.content %></p>
 	<% q.answers.each do |a| %>
-		<p><%= a.message.content if a.message.present? %></p>
+		<p><%= a.message.content if a.message.present? && a.message.user_id == @user_id %></p>
 	<% end if q.answers.present? %>
 <% end if @questions.present? %>

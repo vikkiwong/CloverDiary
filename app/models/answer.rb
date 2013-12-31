@@ -12,14 +12,11 @@ class Answer < ActiveRecord::Base
   belongs_to :message
 
   def self.get_answers_string(user, date, questions)
-  	# 这里需要提高效率
-  	#self.find_by_sql('SELECT question_id, group_concat(message_id) AS FROM answers WHERE user_id = #{user.id} ……')
-
   	str = ""
   	questions.each_with_index do |q, i|
   		str += (i+1).to_s + "、" + questions[i].content + "\n"
-  		msg = questions[i].answers.first.message if questions[i].answers.present? && questions[i].answers.first.message.present?
-  		str += msg.content + "\n" if msg.present?
+      user_answers = questions[i].user_answers(user)
+  		str += msg.content + "\n" if user_answers.present? && user_answers[0].present?
   	end if questions.present?
   	str
   end
@@ -28,8 +25,8 @@ class Answer < ActiveRecord::Base
   	str = ""
   	questions.each_with_index do |q, i|
   		str += "Q：" + questions[i].content + "\n"
-  		msg = questions[i].answers.first.message if questions[i].answers.present? && questions[i].answers.first.message.present?
-  		str += msg.content + "\n" if msg.present?
+      user_answers = questions[i].user_answers(user)
+      str += msg.content + "\n" if user_answers.present? && user_answers[0].present?
   	end if questions.present?
   	str  	
   end

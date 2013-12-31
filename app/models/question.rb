@@ -8,7 +8,7 @@
 class Question < ActiveRecord::Base
   attr_accessible :content, :user_id, :active
   has_many :answers
-  
+
   scope :actived, :conditions => {:active => true}
   scope :ordered, :order => "id DESC"
 
@@ -32,9 +32,9 @@ class Question < ActiveRecord::Base
     Question.find_all_by_id(wd_qids)
   end
 
-  # 查找用户某天的未完成问题
-  # def self.get_unfinished_questions(user, date)
-  # 	question_ids = UserQuestion.find_all_by_user_id_and_created_on_and_finished(user.id, date, false).collect(&:question_id)
-  #   questions = Question.find_all_by_id(question_ids)
-  # end
+  # 用户对问题的回答
+  def user_answers(user)
+    date = Date.today
+    Answer.find_all_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND question_id = #{self.id} AND created_at > #{date}")
+  end
 end
