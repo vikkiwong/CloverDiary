@@ -49,8 +49,17 @@ class MessagesController < ApplicationController
 
     # l：问题列表， 123：选题，n：下一题 w：提问 q：取消提问
     if msg_type == "text" && content == "l"   # l：问题列表，
+      # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
-      @text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content 
+      @text = Answer.get_answers_string(questions)
+
+      # 自问自答
+      wdquestions = Question.find_wdquestions(user, Date.today)
+      if wdquestions.present?
+        @text += "---------------\n我的自言自语\n"
+        @text += Answer.get_wdanswers_string(wdquestions) 
+      end
+
       current_qid  = 0
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
