@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Question < ActiveRecord::Base
-  attr_accessible :content, :created_by
+  attr_accessible :content, :user_id
 
   # 随机n个问题
   def self.find_questions_by_random(n)

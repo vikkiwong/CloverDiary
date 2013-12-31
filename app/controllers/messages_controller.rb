@@ -38,7 +38,6 @@ class MessagesController < ApplicationController
 
     # 处理消息
     msg_handler(user, params, message) if message.present?
-    
   end
 
   private
@@ -69,7 +68,7 @@ class MessagesController < ApplicationController
         @text = "不知道您选择了什么题目哟，回复l查看问题列表~"
       end
     else # 这里所有内容当作回复保存
-      Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid)
+      Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
   		@text = "您的日记已保存，回复n进入下一题，否则继续回答本题~"
   	end
 
