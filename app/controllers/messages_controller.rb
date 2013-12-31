@@ -60,6 +60,7 @@ class MessagesController < ApplicationController
         @text += Answer.get_wdanswers_string(user, Date.today, wdquestions) 
       end
 
+      @text =+= "\n<a href='/users'>显示更多</a>"
       current_qid  = 0
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
