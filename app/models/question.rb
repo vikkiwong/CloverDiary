@@ -35,6 +35,6 @@ class Question < ActiveRecord::Base
   # 用户对问题的回答
   def user_answers(user)
     date = Date.today
-    Answer.find_all_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND question_id = #{self.id} AND created_at > #{date}")
+    Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND question_id = #{self.id} AND created_at > #{date}")
   end
 end
