@@ -27,14 +27,14 @@ class Message < ActiveRecord::Base
                   :pic_url, :scale, :title, :url, :user_id, :media_id, :format, :thumb_media_id
 
   Infos = {
-    isFinished:  "已经是最后一题啦，回复【L】查看列表", 
-    unknowQ: "哎呀，出错了，回复【L】重新选择",
+    isFinished:  "已经是最后一题了\n回复【L】查看列表", 
+    unknowQ: "哎呀，出错了！\n回复【L】重新选择",
     newQ: "给自己一个问题？请输入问题内容。\n输入【Q】取消编辑",
-    alreadySave: "已保存，回复【N】进入下一题，否则继续回答本题",
+    saved: "已保存，你可以继续回答本题\n回复【N】进入下一题\n回复【L】重新选择",
     wCancle: "已取消",
-    wSaved: "已保存，可以开始回答了",
-    wdSaved: "问答已经保存，回复【L】查看列表",
-    helpInfo: "【L】今日问题\n【W】向自己提问\n\n     -- Clover Diary"
+    wSaved: "问题已保存，可以开始回答了",
+    wdSaved: "问答已经保存\n回复【L】查看列表",
+    helpInfo: "【L】今日记\n【w】自问自答\n"
   }
 
   # 当前用户回答的问题序号

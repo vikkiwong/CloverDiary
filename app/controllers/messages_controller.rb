@@ -54,8 +54,8 @@ class MessagesController < ApplicationController
       # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
       @text = "今天的问题是：\n"
-      @text = Answer.get_answers_string(user, questions)
-      @text = "输入问题编号，选择要回答的问题\n输入【H】获得帮助信息"
+      @text += Answer.get_answers_string(user, questions)
+      @text += "输入问题编号，选择要回答的问题\n输入【H】获得帮助信息"
 
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
@@ -97,7 +97,7 @@ class MessagesController < ApplicationController
     else # 这里所有内容当作回复保存
       if user.current_qid > 0 
         Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
-        @text = questions.collect(&:id).include?(current_qid) ? Message::Infos[:alreadySave] : Message::Infos[:wdSaved]  # 区分自问自答和系统问题的回复
+        @text = Message::Infos[:saved]
       else
         @text = Message::Infos[:unknowQ]
       end
