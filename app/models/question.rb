@@ -27,7 +27,8 @@ class Question < ActiveRecord::Base
     beginning_of_today = date.to_time.beginning_of_day
     question_ids = UserQuestion.find_all_by_user_id_and_created_on(user.id, date).collect(&:question_id)
     all_qids = Answer.select("question_id").where(user_id: user.id).where("created_at > ?", beginning_of_today).group("question_id")
-    wdquestions =  Question.find_all_by_id(all_qids - question_ids) if all_qids.present?
+    puts all_qids, question_ids
+    wdquestions =  all_qids.present? ? Question.find_all_by_id(all_qids - question_ids) : []
   end
 
   # 查找用户某天的未完成问题
