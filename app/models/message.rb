@@ -33,6 +33,7 @@ class Message < ActiveRecord::Base
     alreadySave: "您的日记已保存，回复【N】进入下一题，否则继续回答本题~",
     wCancle: "已取消",
     wSaved: "问题已保存，快点回答吧~"
+    wdSaved: "您的自问自答已经保存啦~，回复【L】查看问题列表"
   }
 
   # 当前用户回答的问题序号

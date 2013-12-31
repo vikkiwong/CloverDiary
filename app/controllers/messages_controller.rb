@@ -82,10 +82,9 @@ class MessagesController < ApplicationController
       current_qid = question.id
       @text = Message::Infos[:wSaved]
     else # 这里所有内容当作回复保存
-      # 这里要不要判断是自问自答还是系统提供的问题呢？
       if user.current_qid > 0 
         Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
-    		@text = Message::Infos[:alreadySave]
+        @text = questions.collect(&:id).include?(current_qid) ? Message::Infos[:alreadySave] : Message::Infos[:wdSave]  # 区分自问自答和系统问题的回复
       else
         @text = Message::Infos[:unknowQ]
       end
