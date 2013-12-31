@@ -49,12 +49,14 @@ class MessagesController < ApplicationController
     # l：问题列表， 123：选题，n：下一题
     if msg_type == "text" && content == "l"   # l：问题列表，
       questions = questions.present? ? questions : create_questions(user, 3)
-      @text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content  
+      @text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content 
+      current_qid  = 0
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
         if content == "n"   # ：下一题
           order = Message.current_question_order(user)
           if order == 0  
+            current_qid = 0
             @text = "\n已经是最后一题啦，回复l重新选题！"
           else 
             @text = questions[order - 1].content
@@ -65,14 +67,19 @@ class MessagesController < ApplicationController
           current_qid = questions[content.to_i - 1].id
         end
       else
+        current_qid = 0
         @text = "不知道您选择了什么题目哟，回复l查看问题列表~"
       end
     else # 这里所有内容当作回复保存
-      Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
-  		@text = "您的日记已保存，回复n进入下一题，否则继续回答本题~"
+      if user.current_qid > 0
+        Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
+    		@text = "您的日记已保存，回复n进入下一题，否则继续回答本题~"
+      else
+        @text = "您没有选择问题，回复l重新选题！"
+      end
   	end
 
-    user.current_qid = current_qid and user.save  
+    user.current_qid = current_qid and user.save  if current_qid.present? 
     render "text", :formats => :xml
   end
 
