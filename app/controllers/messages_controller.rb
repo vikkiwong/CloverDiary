@@ -71,10 +71,10 @@ class MessagesController < ApplicationController
         current_qid = 0
         @text = Message::Infos[:unknowQ]
       end
-    elsif msg_type == "text" && content = "w"  # 自问 
+    elsif msg_type == "text" && content == "w"  # 自问 
       current_qid = 0
       @text = Message::Infos[:newQ]
-    elsif msg_type == "text" && content = "q"  # 取消自问 
+    elsif msg_type == "text" && content == "q"  # 取消自问 
       current_qid = 0
       @text = Message::Infos[:cancle]
     elsif msg_type == "text" && Message.last_msg.content == "w" # 保存问题，并进入回答模式
