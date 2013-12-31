@@ -1,0 +1,10 @@
+<%= form_for(@question) do |f| %>
+	<div>
+		<label>问题：</label>
+		<%= f.text_area :content, :rows => 3 %>
+	</div>
+	<div>
+		<%= link_to "返回", :back %>
+		<%= f.submit "确定" %>
+	</div>
+<% end %>

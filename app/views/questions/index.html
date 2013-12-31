@@ -1,0 +1,28 @@
+<h2>问题列表</h2>
+
+<%= link_to "新建", new_question_path %>
+
+<% if @questions.present? %>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>问题</th>
+			<th>创建者</th>
+			<th>创建时间</th>
+			<th>操作</th>
+		</tr>
+
+		<% @questions.each do |q| %>
+			<tr>
+				<td><%= q.id %></td>
+				<td><%= q.content %></td>
+				<td><%= q.user_id %></td>
+				<td><%= q.created_at %></td>
+				<td>
+					<%= link_to "编辑", edit_question_path(q) %>
+					<%= link_to "删除", question_path(q), method: "delete", data: { comfirm: "确定删除么？" } %>
+				</td>
+			</tr>
+		<% end %>
+	</table>
+<% end %>

@@ -1,23 +1,46 @@
 # encoding: utf-8
+# 字段说明
+# t.integer  "user_id"
+# t.string   "open_id"
+# t.integer  "create_time"
+# t.integer  "msg_id"
+# t.string   "msg_type"
+# t.text     "content"
+# t.string   "pic_url"
+# t.float    "location_x"
+# t.float    "location_y"
+# t.float    "scale"
+# t.text     "label"
+# t.string   "title"
+# t.text     "descripton"
+# t.string   "url"
+# t.string   "event"
+# t.string   "event_key"
+# t.datetime "created_at",     :null => false
+# t.datetime "updated_at",     :null => false
+# t.integer  "media_id"
+# t.string   "format"
+# t.integer  "thumb_media_id"
+
 class Message < ActiveRecord::Base
   attr_accessible :content, :create_time, :descripton, :event, :event_key, :label, :location_x, :location_y, :msg_id, :msg_type, :open_id, 
                   :pic_url, :scale, :title, :url, :user_id, :media_id, :format, :thumb_media_id
 
   # 12小时内发送过的内容为("1", "2", "3")的消息
-  def self.last_questions_msg(user)
-    self.find_by_sql('SELECT * FROM messages 
-                      WHERE user_id = #{user.id} AND msg_type = "text" 
-                      AND content in ("1", "2", "3") AND created_at > DATE_SUB(NOW(), INTERVAL 12 HOUR)
-                      ORDER BY ID DESC')
-  end
+  # def self.last_questions_msg(user)
+  #   self.find_by_sql('SELECT * FROM messages 
+  #                     WHERE user_id = #{user.id} AND msg_type = "text" 
+  #                     AND content in ("1", "2", "3") AND created_at > DATE_SUB(NOW(), INTERVAL 12 HOUR)
+  #                     ORDER BY ID DESC')
+  # end
 
   # 12小时内发送过的内容为("1", "2", "3")最后一条消息
-  def self.last_question_msg(user)
-    self.find_by_sql('SELECT * FROM messages 
-                      WHERE user_id = #{user.id} AND msg_type = "text" 
-                      AND content in ("1", "2", "3") AND created_at > DATE_SUB(NOW(), INTERVAL 12 HOUR)
-                      ORDER BY ID DESC LIMIT 1')
-  end
+  # def self.last_question_msg(user)
+  #   self.find_by_sql('SELECT * FROM messages 
+  #                     WHERE user_id = #{user.id} AND msg_type = "text" 
+  #                     AND content in ("1", "2", "3") AND created_at > DATE_SUB(NOW(), INTERVAL 12 HOUR)
+  #                     ORDER BY ID DESC LIMIT 1')
+  # end
 
   # 当前用户回答的问题序号
   # 这个方法有漏洞，
