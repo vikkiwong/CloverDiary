@@ -26,6 +26,30 @@ class Message < ActiveRecord::Base
   attr_accessible :content, :create_time, :descripton, :event, :event_key, :label, :location_x, :location_y, :msg_id, :msg_type, :open_id, 
                   :pic_url, :scale, :title, :url, :user_id, :media_id, :format, :thumb_media_id
 
+  Infos = {
+    isFinished:  "已经是最后一题啦，回复【L】重新选题！", 
+    unknowQ: "不知道您选择了什么题目哟，回复l查看问题列表~",
+    newQ: "给自己一个问题？请输入问题内容。\n输入【Q】取消编辑",
+    alreadySave: "您的日记已保存，回复【N】进入下一题，否则继续回答本题~",
+    cancle: "已取消"
+  }
+
+  # 当前用户回答的问题序号
+  def self.current_question_order(user)
+    beginning_of_today = Time.now.beginning_of_day
+    last_choice_msg = self.where(user_id: user.id, msg_type: "text").where("created_at > ?", beginning_of_today)
+                          .where("content in (?)", ["1", "2", "3"]).order("id desc").first   # 最后一次输入的123
+    return 0 unless last_choice_msg.present?  
+    return 0 unless self.where(user_id: user.id, msg_type: "text", content: "l").where("id > ?", last_choice_msg.id).count == 0  # 排除如果用户输入 l 1 2 l……
+    
+    n_counts = self.where(user_id: user.id, msg_type: "text", content: "n").where("id > ?", last_choice_msg.id).count # 最后一次输入123之后输入的n的次数
+    (last_choice_msg.content.to_i + n_counts) > 3  ? 0 : (last_choice_msg.content.to_i + n_counts)  # 当前选择的第几个题目
+  end
+
+  def self.last_msg(user)
+    self.where(user_id: user.id).order("id desc").first    
+  end
+  
   # 12小时内发送过的内容为("1", "2", "3")的消息
   # def self.last_questions_msg(user)
   #   self.find_by_sql('SELECT * FROM messages 
@@ -41,17 +65,4 @@ class Message < ActiveRecord::Base
   #                     AND content in ("1", "2", "3") AND created_at > DATE_SUB(NOW(), INTERVAL 12 HOUR)
   #                     ORDER BY ID DESC LIMIT 1')
   # end
-
-  # 当前用户回答的问题序号
-  # 这个方法有漏洞，
-  def self.current_question_order(user)
-    beginning_of_today = Time.now.beginning_of_day
-    last_choice_msg = self.where(user_id: user.id, msg_type: "text").where("created_at > ?", beginning_of_today)
-                          .where("content in (?)", ["1", "2", "3"]).order("id desc").first   # 最后一次输入的123
-    return 0 unless last_choice_msg.present?  
-    return 0 unless self.where(user_id: user.id, msg_type: "text", content: "l").where("id > ?", last_choice_msg.id).count == 0  # 排除如果用户输入 l 1 2 l……
-    
-    n_counts = self.where(user_id: user.id, msg_type: "text", content: "n").where("id > ?", last_choice_msg.id).count # 最后一次输入123之后输入的n的次数
-    (last_choice_msg.content.to_i + n_counts) > 3  ? 0 : (last_choice_msg.content.to_i + n_counts)  # 当前选择的第几个题目
-  end
 end

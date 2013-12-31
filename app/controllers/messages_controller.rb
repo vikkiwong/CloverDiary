@@ -43,10 +43,11 @@ class MessagesController < ApplicationController
   private
   # 处理微信消息
   def msg_handler(user, params, message)
-    msg_type, content = params[:xml][:MsgType], params[:xml][:Content].downcase
+    msg_type = params[:xml][:MsgType]
+    content = params[:xml][:Content].downcase  if params[:xml][:Content].present?
     questions = Question.get_questions(user, Date.today)
 
-    # l：问题列表， 123：选题，n：下一题
+    # l：问题列表， 123：选题，n：下一题 w：提问 q：取消提问
     if msg_type == "text" && content == "l"   # l：问题列表，
       questions = questions.present? ? questions : create_questions(user, 3)
       @text = "1、" + questions[0].content + "\n2、" + questions[1].content + "\n3、" + questions[2].content 
@@ -57,7 +58,7 @@ class MessagesController < ApplicationController
           order = Message.current_question_order(user)
           if order == 0  
             current_qid = 0
-            @text = "已经是最后一题啦，回复l重新选题！"
+            @text = Message::Infos[:isFinished]
           else 
             @text = questions[order - 1].content
             current_qid = questions[order - 1].id
@@ -68,14 +69,24 @@ class MessagesController < ApplicationController
         end
       else
         current_qid = 0
-        @text = "不知道您选择了什么题目哟，回复l查看问题列表~"
+        @text = Message::Infos[:unknowQ]
       end
+    elsif msg_type == "text" && content = "w"  # 自问 
+      current_qid = 0
+      @text = Message::Infos[:newQ]
+    elsif msg_type == "text" && content = "q"  # 取消自问 
+      current_qid = 0
+      @text = Message::Infos[:cancle]
+    elsif msg_type == "text" && Message.last_msg.content == "w" # 保存问题，并进入回答模式
+      question = Question.create(content: content, user_id: user.id)
+      current_qid = question.id
     else # 这里所有内容当作回复保存
-      if user.current_qid > 0
+      # 这里要不要判断是自问自答还是系统提供的问题呢？
+      if user.current_qid > 0 
         Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
-    		@text = "您的日记已保存，回复n进入下一题，否则继续回答本题~"
+    		@text = Message::Infos[:alreadySave]
       else
-        @text = "您没有选择问题，回复l重新选题！"
+        @text = Message::Infos[:unknowQ]
       end
   	end
 
