@@ -76,10 +76,11 @@ class MessagesController < ApplicationController
       @text = Message::Infos[:newQ]
     elsif msg_type == "text" && content == "q"  # 取消自问 
       current_qid = 0
-      @text = Message::Infos[:cancle]
+      @text = Message::Infos[:wCancle]
     elsif msg_type == "text" && Message.last_msg(user).present? && Message.last_msg(user).content == "w" # 保存问题，并进入回答模式
       question = Question.create(content: content, user_id: user.id)
       current_qid = question.id
+      @text = Message::Infos[:wSaved]
     else # 这里所有内容当作回复保存
       # 这里要不要判断是自问自答还是系统提供的问题呢？
       if user.current_qid > 0 

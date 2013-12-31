@@ -31,7 +31,8 @@ class Message < ActiveRecord::Base
     unknowQ: "不知道您选择了什么题目哟，回复l查看问题列表~",
     newQ: "给自己一个问题？请输入问题内容。\n输入【Q】取消编辑",
     alreadySave: "您的日记已保存，回复【N】进入下一题，否则继续回答本题~",
-    cancle: "已取消"
+    wCancle: "已取消",
+    wSaved: "问题已保存，快点回答吧~"
   }
 
   # 当前用户回答的问题序号
