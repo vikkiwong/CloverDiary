@@ -11,7 +11,7 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :message
 
-  def self.get_answers_string(user, date, questions)
+  def self.get_answers_string(user, questions)
   	str = ""
   	questions.each_with_index do |q, i|
   		str += (i+1).to_s + "、" + questions[i].content + "\n"
@@ -22,7 +22,7 @@ class Answer < ActiveRecord::Base
   	str
   end
 
-  def self.get_wdanswers_string(user, date, questions)
+  def self.get_wdanswers_string(user, questions)
   	str = ""
   	questions.each_with_index do |q, i|
   		str += "Q：" + questions[i].content + "\n"

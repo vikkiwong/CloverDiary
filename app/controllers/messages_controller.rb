@@ -51,13 +51,13 @@ class MessagesController < ApplicationController
     if msg_type == "text" && content == "l"   # l：问题列表，
       # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
-      @text = Answer.get_answers_string(user, Date.today, questions)
+      @text = Answer.get_answers_string(user, questions)
 
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
       if wdquestions.present?
         @text += "---------------\n我的自言自语\n"
-        @text += Answer.get_wdanswers_string(user, Date.today, wdquestions) 
+        @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
       @text += "\n\n" + SITE_DOMAIN + '/users/' + user.id.to_s
 
