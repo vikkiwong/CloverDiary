@@ -16,7 +16,7 @@ class Answer < ActiveRecord::Base
   	questions.each_with_index do |q, i|
   		str += (i+1).to_s + "、" + questions[i].content + "\n"
       user_answers = questions[i].user_answers(user)
-  		str += msg.content + "\n" if user_answers.present? && user_answers[0].present?
+  		str += user_answers.collect(:content).join("\n") if user_answers.present?
   	end if questions.present?
   	str
   end
@@ -26,7 +26,7 @@ class Answer < ActiveRecord::Base
   	questions.each_with_index do |q, i|
   		str += "Q：" + questions[i].content + "\n"
       user_answers = questions[i].user_answers(user)
-      str += msg.content + "\n" if user_answers.present? && user_answers[0].present?
+      str += user_answers.collect(:content).join("\n") if user_answers.present?
   	end if questions.present?
   	str  	
   end
