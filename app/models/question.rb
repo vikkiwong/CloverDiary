@@ -6,7 +6,9 @@
 # t.datetime "updated_at", :null => false
 # t.boolean  "active",     :default => true
 class Question < ActiveRecord::Base
-  attr_accessible :content, :user_id
+  attr_accessible :content, :user_id, :active
+  has_many :answers
+  
   scope :actived, :conditions => {:active => true}
   scope :ordered, :order => "id DESC"
 

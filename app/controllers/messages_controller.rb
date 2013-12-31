@@ -51,7 +51,7 @@ class MessagesController < ApplicationController
     if msg_type == "text" && content == "l"   # l：问题列表，
       # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
-      @text = Answer.get_answers_string(questions)
+      @text = Answer.get_answers_string(user, Date.today, questions)
 
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
