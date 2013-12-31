@@ -53,7 +53,7 @@ class MessagesController < ApplicationController
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
         if content == "n"   # ：下一题
-          order = Message.current_question_order
+          order = Message.current_question_order(user)
           if order == 0  
             @text = "\n已经是最后一题啦，回复l重新选题！"
           else 
