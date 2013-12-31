@@ -59,8 +59,8 @@ class MessagesController < ApplicationController
         @text += "---------------\n我的自言自语\n"
         @text += Answer.get_wdanswers_string(user, Date.today, wdquestions) 
       end
-      url = SITE_DOMAIN + '/users'
-      @text += "\n<a href='" + url + "'>查看更多</a>。"
+      @text += "\n" + SITE_DOMAIN + '/users/<%= user.id %>'
+
       current_qid  = 0
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
