@@ -57,7 +57,7 @@ class MessagesController < ApplicationController
           order = Message.current_question_order(user)
           if order == 0  
             current_qid = 0
-            @text = "\n已经是最后一题啦，回复l重新选题！"
+            @text = "已经是最后一题啦，回复l重新选题！"
           else 
             @text = questions[order - 1].content
             current_qid = questions[order - 1].id
