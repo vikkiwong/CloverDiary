@@ -1,1 +1,6 @@
-我应该展示些什么
+<% @questions.each do |q| %>
+	<p style='color:red;'><%= q.content %></p>
+	<% q.answers.each do |a| %>
+		<p><%= a.message.content if a.message.present? %></p>
+	<% end if q.answers.present? %>
+<% end if @questions.present? %>
