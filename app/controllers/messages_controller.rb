@@ -59,7 +59,7 @@ class MessagesController < ApplicationController
         @text += "---------------\n我的自言自语\n"
         @text += Answer.get_wdanswers_string(user, Date.today, wdquestions) 
       end
-      @text += "\n" + SITE_DOMAIN + '/users/<%= user.id %>'
+      @text += "\n\n" + SITE_DOMAIN + '/users/' + user.id
 
       current_qid  = 0
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
