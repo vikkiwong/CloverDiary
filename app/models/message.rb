@@ -20,11 +20,15 @@ class Message < ActiveRecord::Base
   end
 
   # 当前用户回答的问题序号
+  # 这个方法有漏洞，
   def self.current_question_order(user)
     beginning_of_today = Time.now.beginning_of_day
     last_choice_msg = self.where(user_id: user.id, msg_type: "text").where("created_at > ?", beginning_of_today)
-                          .where("content in ?", ["1", "2", "3"]).order("id desc").limit(1)   # 最后一次输入的123
+                          .where("content in (?)", ["1", "2", "3"]).order("id desc").first   # 最后一次输入的123
+    return 0 unless last_choice_msg.present?  
+    return 0 unless self.where(user_id: user.id, msg_type: "text", content: "l").where("id > ?", last_choice_msg.id).count == 0  # 排除如果用户输入 l 1 2 l……
+    
     n_counts = self.where(user_id: user.id, msg_type: "text", content: "n").where("id > ?", last_choice_msg.id).count # 最后一次输入123之后输入的n的次数
-    (last_choice_msg.content.to_i + n_counts) > 3 ? 0 : (last_choice_msg.content.to_i + n_counts) # 当前选择的第几个题目
+    (last_choice_msg.content.to_i + n_counts) > 3  ? 0 : (last_choice_msg.content.to_i + n_counts)  # 当前选择的第几个题目
   end
 end
