@@ -9,7 +9,7 @@
 	</div>
 <% end if @sys_questions.present? %>
 
-<h3>我的自言自语</h3>
+<h3>我的自问自答</h3>
 <hr>
 <% @self_questions.each do |q| %>
 	<h4><%= q.content %></h4>
@@ -19,3 +19,7 @@
 		<% end if q.user_msgs(@user_id).present? %>
 	</div>
 <% end if @self_questions.present? %>
+
+<h3>我的自言自语</h3>
+<hr>
+<p class="text-muted"><%= @whispered %></p>

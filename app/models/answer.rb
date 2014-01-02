@@ -25,6 +25,6 @@ class Answer < ActiveRecord::Base
   	str = "\n\n-------自言自语------"
     msg_ids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user_id} AND question_id = 0 AND created_at > '#{date}'").collect(&:message_id)  # 用户某天的自言自语
     msgs = Message.find_all_by_id(msg_ids)
-    msgs.collect{|m| m.content if m.msg_type == "text"}.join("\n").truncate(140) if msgs.present?
+    msgs.collect{|m| m.content if m.msg_type == "text"}.join("\n") if msgs.present?
   end
 end
