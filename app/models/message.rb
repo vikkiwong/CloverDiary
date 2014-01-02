@@ -34,7 +34,9 @@ class Message < ActiveRecord::Base
     wCancle: "已取消",
     wSaved: "问题已保存，可以开始回答了",
     wdSaved: "问答已经保存\n回复【L】查看列表",
-    helpInfo: "【L】今日记\n【w】自问自答\n"
+    helpInfo: "【L】今日记\n【w】自问自答\n",
+    zStart: "可以开始自言自语啦",
+    zSaved: "已保存，回复【L】查看列表，否则继续自言自语"
   }
 
   # 当前用户回答的问题序号
