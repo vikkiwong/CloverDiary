@@ -15,8 +15,7 @@ class MessagesController < ApplicationController
                              ticket: params[:xml][:Ticket], pic_url: params[:xml][:PicUrl], media_id: params[:xml][:MediaId], format: params[:xml][:Format],
                              thumb_media_id: params[:xml][:ThumbMediaId], localtion_x: params[:xml][:Location_X], localtion_y: params[:xml][:Location_Y],
                              scale: params[:xml][:Scale], label: params[:xml][:Label], title: params[:xml][:Title], description: params[:xml][:Description],
-                             url: params[:xml][:Url], 
-                             )
+                             url: params[:xml][:Url])
   	# 保存消息
   	# case params[:xml][:MsgType]
   	# when "text"
