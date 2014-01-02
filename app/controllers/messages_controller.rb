@@ -83,7 +83,7 @@ class MessagesController < ApplicationController
 
     # 当作回答保存
     else
-      if current_qid.present? && current_qid > 0
+      if user.current_qid.present? && user.current_qid > 0
         Answer.create(user_id: user.id, message_id: message.id, question_id: user.current_qid) if message.present?
       else
         @text = Message::Infos[:unknowQ]
