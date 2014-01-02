@@ -1,21 +1,21 @@
 <h3>今日记</h3>
 <hr>
-<% @questions.each do |q| %>
+<% @sys_questions.each do |q| %>
 	<h4><%= q.content %></h4>
 	<div style="padding-bottom:15px;">
 		<% q.user_msgs(@user_id).each do |msg| %>
 			<p class="text-muted"><%= msg.content if msg.present? %></p>
 		<% end if q.user_msgs(@user_id).present? %>
 	</div>
-<% end if @questions.present? %>
+<% end if @sys_questions.present? %>
 
 <h3>我的自言自语</h3>
 <hr>
-<% @wd_questions.each do |q| %>
+<% @self_questions.each do |q| %>
 	<h4><%= q.content %></h4>
 	<div style="padding-bottom:15px;">
 		<% q.user_msgs(@user_id).each do |msg| %>
 			<p class="text-muted"><%= msg.content if msg.present? %></p>
 		<% end if q.user_msgs(@user_id).present? %>
 	</div>
-<% end if @wd_questions.present? %>
+<% end if @self_questions.present? %>

@@ -52,8 +52,7 @@ class MessagesController < ApplicationController
       @text = Message::Infos[:helpInfo]
     elsif msg_type == "text" && ( content == "l" || ( content == "n" &&  Message.current_question_order(user) == 4)) # l：问题列表
       # 系统问题
-      questions = questions.present? ? questions : create_questions(user, 3)
-      @text = "今天的问题全部答完啦~\n"
+      @text += "\n\n----今日记----\n"
       @text += Answer.get_answers_string(user, questions)
       
       # 自问自答
@@ -65,7 +64,7 @@ class MessagesController < ApplicationController
 
       @url = SITE_DOMAIN + '/users/' + user.id.to_s
       @title = "今日问题回答完毕！"
-      
+
       current_qid  = 0 and type = "picmsg"
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
@@ -89,11 +88,12 @@ class MessagesController < ApplicationController
     elsif msg_type == "text" && content == "w"  # 自问 
       current_qid = 0
       @text = Message::Infos[:newQ]
-    elsif msg_type == "text" && content == "q"  # 取消自问 
+    elsif msg_type == "text" && content == "q" && Message.last_msg(user).present? && Message.last_msg(user).content == "w"  #取消自问 
       current_qid = 0
       @text = Message::Infos[:wCancle]
     elsif msg_type == "text" && Message.last_msg(user).present? && Message.last_msg(user).content == "w" # 保存问题，并进入回答模式
       question = Question.create(content: content, user_id: user.id)
+      UserQuestion.create(user_id: user.id, question_id: question.id, :created_on: Date.today, qtype: "self")
       current_qid = question.id
       @text = Message::Infos[:wSaved]
     else # 这里所有内容当作回复保存
@@ -113,15 +113,7 @@ class MessagesController < ApplicationController
     end
   end
 
-  # 创建用户当天的n个问题
-  def create_questions(user, n)
-    questions = Question.find_questions_by_random(user, n)
-    questions.each do |q|
-      UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
-    end if questions.present?   
-    questions
-  end
-
+  # 微信验证
   def check_wx_legality
     array = [WX_TOKEN, params[:timestamp], params[:nonce]].sort
     render :text => "Forbidden", :status => 403 if params[:signature] != Digest::SHA1.hexdigest(array.join)
