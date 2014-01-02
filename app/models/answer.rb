@@ -16,7 +16,8 @@ class Answer < ActiveRecord::Base
   	questions.each_with_index do |q, i|
   		str += "【" + (i+1).to_s + "】" + questions[i].content + "\n"
       user_msgs = questions[i].user_msgs(user_id)
-  		str += user_msgs.collect{|m| m.content.present?}.collect(&:content).join("\n").truncate(140) + "\n" if user_msgs.present?
+      p user_msgs
+  		str += user_msgs.collect(&:content).join("\n").truncate(140) + "\n" if user_msgs.present?
   	end if questions.present?
   	str
   end
