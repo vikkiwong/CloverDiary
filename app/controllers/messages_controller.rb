@@ -61,7 +61,7 @@ class MessagesController < ApplicationController
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
       if Answer.get_whispered(user.id, Date.today).present? 
         @text += "\n\n---------我的自言自语----------"
-        @text += Answer.get_whispered(user_id, Date.today) # 自言自语
+        @text += Answer.get_whispered(user.id, Date.today) # 自言自语
       end
       current_qid = 0 and type = "picmsg"
 
