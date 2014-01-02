@@ -53,7 +53,7 @@ class MessagesController < ApplicationController
     elsif msg_type == "text" && ( content == "l" || ( content == "n" &&  Message.current_question_order(user) == 4)) # l：问题列表
       # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
-      @text = "今天的问题是：\n"
+      @text = "今天的问题全部答完啦~\n"
       @text += Answer.get_answers_string(user, questions)
       
       # 自问自答
@@ -63,9 +63,10 @@ class MessagesController < ApplicationController
         @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
 
-      @text += "\n\n----这里是测试链接----\n\n"
-      @text += SITE_DOMAIN + '/users/' + user.id.to_s
-      current_qid  = 0
+      @url = SITE_DOMAIN + '/users/' + user.id.to_s
+      @title = "今日问题回答完毕！"
+      
+      current_qid  = 0 and type = "picmsg"
   	elsif msg_type == "text" && ["1", "2", "3", "n"].include?(content)  # 选题 
       if questions.present? && questions.count == 3
         if content == "n"   # ：下一题
@@ -105,7 +106,11 @@ class MessagesController < ApplicationController
   	end
 
     user.current_qid = current_qid and user.save  if current_qid.present? 
-    render "text", :formats => :xml
+    if type.present? && type == "picmsg"
+      render "picmsg", :formats => :xml
+    else
+      render "text", :formats => :xml
+    end
   end
 
   # 创建用户当天的n个问题
