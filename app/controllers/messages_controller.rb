@@ -93,12 +93,12 @@ class MessagesController < ApplicationController
       @text = Message::Infos[:wCancle]
     elsif msg_type == "text" && Message.last_msg(user).present? && Message.last_msg(user).content == "w" # 保存问题，并进入回答模式
       question = Question.create(content: content, user_id: user.id)
-      UserQuestion.create(user_id: user.id, question_id: question.id, :created_on: Date.today, qtype: "self")
+      UserQuestion.create(user_id: user.id, question_id: question.id, created_on: Date.today, qtype: "self")
       current_qid = question.id
       @text = Message::Infos[:wSaved]
     else # 这里所有内容当作回复保存
       if user.current_qid > 0 
-        Answer.create(:user_id => user.id, :message_id => message.id, :question_id => user.current_qid) if message.present?
+        Answer.create(user_id: user.id, message_id: message.id, question_id: user.current_qid) if message.present?
         @text = Message::Infos[:saved]
       else
         @text = Message::Infos[:unknowQ]
