@@ -58,7 +58,7 @@ class MessagesController < ApplicationController
     elsif message.msg_type == "text" && message.content == "n"
       @title = "今天的三叶草日记"
       @url = SITE_DOMAIN + '/users/' + user.id.to_s
-      @text = Answer.get_answers_string(user, questions)
+      @text = Answer.get_answers_string(user.id, questions)
       current_qid = 0 and type = "picmsg"
 
     # 输入q，且上一条消息是点击了自问自答或者自言自语，则取消自问自答或自言自语
@@ -104,13 +104,13 @@ class MessagesController < ApplicationController
    #  elsif msg_type == "text" && ( content == "l" || ( content == "n" &&  Message.current_question_order(user) == 4)) # l：问题列表
    #    # 系统问题
    #    @text = "----今日记----\n"
-   #    @text += Answer.get_answers_string(user, questions)
+   #    @text += Answer.get_answers_string(user.id, questions)
       
    #    # 自问自答
    #    wdquestions = Question.find_self_questions(user, Date.today)
    #    if wdquestions.present?
    #      @text += "\n----我的自言自语----\n"
-   #      @text += Answer.get_wdanswers_string(user, wdquestions) 
+   #      @text += Answer.get_wdanswers_string(user.id, wdquestions) 
    #    end
 
    #    @url = SITE_DOMAIN + '/users/' + user.id.to_s
