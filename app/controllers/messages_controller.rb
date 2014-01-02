@@ -65,6 +65,10 @@ class MessagesController < ApplicationController
     elsif message.msg_type == "text" && message.content == "q" && (last_msg = Message.last_msg(user.id)).present? && ["CLICK_3", "CLICK_2"].include?(last_msg.event_key)
       @text = Message::Infos[:cancle] and current_qid = 0
 
+    # 输入数字选择题目
+    elsif message.msg_type == "text" && (i = message.content.to_i) > 0 && i <= q_count
+      @text = questions[i-1].content and current_qid = questions[i-1].id
+
     # -1表示自言自语状态，保存自言自语
     elsif user.current_qid == -1
       Answer.create(user_id: user.id, message_id: message.id, question_id: 0) if message.present?
