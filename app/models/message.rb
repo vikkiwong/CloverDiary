@@ -26,7 +26,7 @@ class Message < ActiveRecord::Base
                   :pic_url, :scale, :title, :url, :user_id, :media_id, :format, :thumb_media_id
 
   Infos = {
-    sayHi: "欢迎~"
+    sayHi: "欢迎~",
     isFinished:  "已经是最后一题了\n回复【L】查看列表", 
     unknowQ: "哎呀，出错了！\n回复【L】重新选择",
     newQ: "给自己一个问题？请输入问题内容。\n输入【Q】取消编辑",
