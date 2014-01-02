@@ -52,13 +52,13 @@ class MessagesController < ApplicationController
       @text = Message::Infos[:helpInfo]
     elsif msg_type == "text" && ( content == "l" || ( content == "n" &&  Message.current_question_order(user) == 4)) # l：问题列表
       # 系统问题
-      @text = "\n\n----今日记----\n"
+      @text = "----今日记----\n"
       @text += Answer.get_answers_string(user, questions)
       
       # 自问自答
       wdquestions = Question.find_wdquestions(user, Date.today)
       if wdquestions.present?
-        @text += "\n\n----我的自言自语----\n"
+        @text += "\n----我的自言自语----\n"
         @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
 
