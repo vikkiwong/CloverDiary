@@ -10,39 +10,20 @@ class MessagesController < ApplicationController
   def create
   	# 先查找/保存用户
   	user = User.find_or_create_by_open_id(:open_id => params[:xml][:FromUserName])
+    # 保存消息
     message = Message.create(user_id: user.id, open_id: params[:xml][:FromUserName], create_time: params[:xml][:CreateTime], msg_type: params[:xml][:MsgType], 
                              msg_id: params[:xml][:MsgId], content: params[:xml][:Content], event: params[:xml][:Event], event_key: params[:xml][:EventKey], 
                              ticket: params[:xml][:Ticket], pic_url: params[:xml][:PicUrl], media_id: params[:xml][:MediaId], format: params[:xml][:Format],
                              thumb_media_id: params[:xml][:ThumbMediaId], localtion_x: params[:xml][:Location_X], localtion_y: params[:xml][:Location_Y],
                              scale: params[:xml][:Scale], label: params[:xml][:Label], title: params[:xml][:Title], description: params[:xml][:Description],
                              url: params[:xml][:Url])
-  	# 保存消息
-  	# case params[:xml][:MsgType]
-  	# when "text"
-  	# 	message = Message.create(user_id: user.id, open_id: params[:xml][:FromUserName], create_time: params[:xml][:CreateTime], msg_type: params[:xml][:MsgType], 
-  	# 		                       content: params[:xml][:Content], :msg_id => params[:xml][:MsgId])
-  	# when "event"
-  	# 	user.followed = false and user.save if params[:xml][:Event] == "unsubscribe"   # 如果取消订阅，修改followed标识
-   #    Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
-   #                   event_key: params[:xml][:EventKey], ticket: params[:xml][:Ticket])
-  	# when "image"
-  	# 	message = Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
-  	# 		             :pic_url => params[:xml][:PicUrl], :media_id => params[:xml][:MediaId], :msg_id => params[:xml][:MsgId])
-  	# when "voice"
-  	# 	message = Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
-  	# 		             :format => params[:xml][:Format], :media_id => params[:xml][:MediaId], :msg_id => params[:xml][:MsgId])
-  	# when "video"
-  	# 	message = Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
-  	# 		             :thumb_media_id => params[:xml][:ThumbMediaId], :media_id => params[:xml][:MediaId], :msg_id => params[:xml][:MsgId])
-  	# when "location"
-  	# 	message = Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
-  	# 		             :localtion_x => params[:xml][:Location_X], :localtion_y => params[:xml][:Location_Y], :scale => params[:xml][:Scale], 
-  	# 		             :label => params[:xml][:Label], :msg_id => params[:xml][:MsgId])
-  	# when "link"
-  	# 	message = Message.create(:user_id => user.id, :open_id => params[:xml][:FromUserName], :create_time => params[:xml][:CreateTime], :msg_type => params[:xml][:MsgType], 
-  	# 		             :title => params[:xml][:Title], :description => params[:xml][:Description], :url => params[:xml][:Url], :msg_id => params[:xml][:MsgId])
-  	# end
-
+    # 更新用户关注状态
+    if message.msg_type == "event" && message.event == "unsubscribe"
+      user.update_attributes(followed: false)
+    elsif message.msg_type == "event" && message.event == "subscribe"
+      user.update_attributes(followed: true)
+    end
+    
     # 处理消息
     msg_handler(user, params, message) if message.present?
   end
