@@ -62,7 +62,7 @@ class MessagesController < ApplicationController
       current_qid = 0 and type = "picmsg"
 
     # 输入q，且上一条消息是点击了自问自答或者自言自语，则取消自问自答或自言自语
-    elsif message.msg_type == "text" && message.content == "q" && (last_msg = Message.last_msg(user)).present? && ["CLICK_3", "CLICK_2"].include?(last_msg.event_key)
+    elsif message.msg_type == "text" && message.content == "q" && (last_msg = Message.last_msg(user.id)).present? && ["CLICK_3", "CLICK_2"].include?(last_msg.event_key)
       @text = Message::Infos[:cancle] and current_qid = 0
 
     # -1表示自言自语状态，保存自言自语
@@ -71,7 +71,7 @@ class MessagesController < ApplicationController
       current_qid = -1 and @text = Message::Infos[:zSaved] 
 
     # 保存自问的问题
-    elsif message.msg_type == "text" && (last_msg = Message.last_msg(user)).present? && last_msg.event_key == "CLICK_2"
+    elsif message.msg_type == "text" && (last_msg = Message.last_msg(user.id)).present? && last_msg.event_key == "CLICK_2"
       question = Question.create(content: content, user_id: user.id)
       UserQuestion.create(user_id: user.id, question_id: question.id, created_on: Date.today, qtype: "self")
       current_qid = question.id and @text = Message::Infos[:wSaved]  
