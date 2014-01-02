@@ -46,7 +46,7 @@ class Message < ActiveRecord::Base
     return 0 unless self.where(user_id: user.id, msg_type: "text", content: "l").where("id > ?", last_choice_msg.id).count == 0  # 排除如果用户输入 l 1 2 l……
     
     n_counts = self.where(user_id: user.id, msg_type: "text", content: "n").where("id > ?", last_choice_msg.id).count # 最后一次输入123之后输入的n的次数
-    (last_choice_msg.content.to_i + n_counts) > 3  ? 0 : (last_choice_msg.content.to_i + n_counts)  # 当前选择的第几个题目
+    (last_choice_msg.content.to_i + n_counts) > 3  ? 4 : (last_choice_msg.content.to_i + n_counts)  # 当前选择的第几个题目
   end
 
   # 本条微信消息发送前的最后一条消息

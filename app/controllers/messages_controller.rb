@@ -48,9 +48,9 @@ class MessagesController < ApplicationController
     questions = Question.get_questions(user, Date.today)
 
     # l：问题列表， 123：选题，n：下一题 w：提问 q：取消提问
-    if msg_type == "text" && content == "h"   # l：问题列表，
+    if msg_type == "text" && content == "h"   # h：帮助信息
       @text = Message::Infos[:helpInfo]
-    elsif msg_type == "text" && content == "l"   # l：问题列表，
+    elsif msg_type == "text" && ( content == "l" || ( content == "n" &&  Message.current_question_order(user) == 4)) # l：问题列表
       # 系统问题
       questions = questions.present? ? questions : create_questions(user, 3)
       @text = "今天的问题是：\n"
@@ -63,7 +63,6 @@ class MessagesController < ApplicationController
         @text += Answer.get_wdanswers_string(user, wdquestions) 
       end
 
-      @text += "\n-------小贴士-------\n输入编号选择问题\n输入【H】获得帮助信息"
       @text += "\n\n----这里是测试链接----\n\n"
       @text += SITE_DOMAIN + '/users/' + user.id.to_s
       current_qid  = 0
@@ -71,10 +70,10 @@ class MessagesController < ApplicationController
       if questions.present? && questions.count == 3
         if content == "n"   # ：下一题
           order = Message.current_question_order(user)
-          if order == 0  
+          if order == 0 
             current_qid = 0
             @text = Message::Infos[:isFinished]
-          else 
+          else
             @text = questions[order - 1].content
             current_qid = questions[order - 1].id
           end
@@ -111,7 +110,7 @@ class MessagesController < ApplicationController
 
   # 创建用户当天的n个问题
   def create_questions(user, n)
-    questions = Question.find_questions_by_random(user, 3)
+    questions = Question.find_questions_by_random(user, n)
     questions.each do |q|
       UserQuestion.create(:user_id => user.id, :question_id => q.id, :created_on => Date.today)
     end if questions.present?   
