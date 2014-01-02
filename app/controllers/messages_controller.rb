@@ -58,7 +58,11 @@ class MessagesController < ApplicationController
     elsif message.msg_type == "text" && message.content == "n"
       @title = "今天的三叶草日记"
       @url = SITE_DOMAIN + '/users/' + user.id.to_s
-      @text = Answer.get_answers_string(user.id, questions)
+      @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
+      if Answer.get_whispered(user_id, Date.today).present? 
+        @text += "\n\n---------我的自言自语----------"
+        @text += Answer.get_whispered(user_id, Date.today) # 自言自语
+      end
       current_qid = 0 and type = "picmsg"
 
     # 输入q，且上一条消息是点击了自问自答或者自言自语，则取消自问自答或自言自语
@@ -79,11 +83,6 @@ class MessagesController < ApplicationController
       question = Question.create(content: content, user_id: user.id)
       UserQuestion.create(user_id: user.id, question_id: question.id, created_on: Date.today, qtype: "self")
       current_qid = question.id and @text = Message::Infos[:wSaved]  
-    
-    # 保存自言自语的内容
-    # elsif message.msg_type == "text" && (last_msg = Message.last_msg(user)).present? && last_msg.event_key == "CLICK_3"
-    #   Answer.create(user_id: user.id, message_id: message.id, question_id: 0) if message.present?
-    #   current_qid = -1 and @text = Message::Infos[:zSaved] 
 
     # 当作回答保存
     else
