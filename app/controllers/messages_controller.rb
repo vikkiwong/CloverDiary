@@ -52,7 +52,7 @@ class MessagesController < ApplicationController
       @text = Message::Infos[:helpInfo]
     elsif msg_type == "text" && ( content == "l" || ( content == "n" &&  Message.current_question_order(user) == 4)) # l：问题列表
       # 系统问题
-      @text += "\n\n----今日记----\n"
+      @text = "\n\n----今日记----\n"
       @text += Answer.get_answers_string(user, questions)
       
       # 自问自答
