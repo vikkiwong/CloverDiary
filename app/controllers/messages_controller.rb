@@ -50,8 +50,6 @@ class MessagesController < ApplicationController
   private
   # 处理微信消息
   def msg_handler(user, params, message)
-    if 
-
    #  msg_type = params[:xml][:MsgType]
    #  content = params[:xml][:Content].downcase  if params[:xml][:Content].present?
    #  questions = Question.get_questions(user, Date.today)
@@ -118,12 +116,14 @@ class MessagesController < ApplicationController
    #    end
   	# end
 
-    user.current_qid = current_qid and user.save  if current_qid.present? 
-    if type.present? && type == "picmsg"
-      render "picmsg", :formats => :xml
-    else
-      render "text", :formats => :xml
-    end
+   #  user.current_qid = current_qid and user.save  if current_qid.present? 
+   #  if type.present? && type == "picmsg"
+   #    render "picmsg", :formats => :xml
+   #  else
+   #    render "text", :formats => :xml
+   #  end
+   @text = "抱歉，测试中"
+   render "text", :formats => :xml
   end
 
   # 微信验证
