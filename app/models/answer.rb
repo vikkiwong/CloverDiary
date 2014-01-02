@@ -11,21 +11,21 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :message
 
-  def self.get_answers_string(user, questions)
+  def self.get_answers_string(user_id, questions)
   	str = ""
   	questions.each_with_index do |q, i|
   		str += "【" + (i+1).to_s + "】" + questions[i].content + "\n"
-      user_msgs = questions[i].user_msgs(user.id)
+      user_msgs = questions[i].user_msgs(user_id)
   		str += user_msgs.collect(&:content).join("\n").truncate(140) + "\n" if user_msgs.present?
   	end if questions.present?
   	str
   end
 
-  def self.get_wdanswers_string(user, questions)
+  def self.get_wdanswers_string(user_id, questions)
   	str = ""
   	questions.each_with_index do |q, i|
   		str += "Q：" + questions[i].content + "\n"
-      user_msgs = questions[i].user_msgs(user.id)
+      user_msgs = questions[i].user_msgs(user_id)
       str += user_msgs.collect(&:content).join("\n").truncate(140)  + "\n" if user_msgs.present?
   	end if questions.present?
   	str  	

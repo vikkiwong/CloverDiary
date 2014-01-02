@@ -4,6 +4,7 @@ CloverDiary::Application.routes.draw do
   resources :messages, :only => [:index, :create]
   resources :questions
   resources :users, :only => :show
+  resources :menu
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

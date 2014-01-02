@@ -1,2 +1,4 @@
-wx_token: "WX_TOKEN"
-site_domain: "SITE_DOMAIN"
+wx_token: "Token"
+site_domain: "SiteDomain"
+app_id: "AppId"
+app_secret: "AppSecret"

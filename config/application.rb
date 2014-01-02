@@ -65,3 +65,5 @@ end
 WECHAT_SETTINGS = YAML.load_file(Rails.root.join("config", "wechat.yml"))
 WX_TOKEN = WECHAT_SETTINGS["wx_token"]
 SITE_DOMAIN = WECHAT_SETTINGS["site_domain"]
+APP_ID = WECHAT_SETTINGS["app_id"]
+APP_SECRET = WECHAT_SETTINGS["app_secret"]

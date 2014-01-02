@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 		date  = Date.today
 		user = User.find(params[:id])
 		@user_id = user.id
-		@sys_questions = Question.get_questions(user, date) # 系统问题
-		@self_questions = Question.find_wdquestions(user, date) # 自问自答
+		@sys_questions = Question.find_sys_questions(user.id, date) # 系统问题
+		@self_questions = Question.find_self_questions(user.id, date) # 自问自答
 	end
 end
