@@ -3,12 +3,12 @@
 # t.integer  "user_id"
 # t.string   "open_id"
 # t.integer  "create_time"
-# t.integer  "msg_id"
+# t.string  "msg_id"
 # t.string   "msg_type"
 # t.text     "content"
 # t.string   "pic_url"
-# t.float    "location_x"
-# t.float    "location_y"
+# t.double    "location_x"
+# t.double    "location_y"
 # t.float    "scale"
 # t.text     "label"
 # t.string   "title"
@@ -18,9 +18,9 @@
 # t.string   "event_key"
 # t.datetime "created_at",     :null => false
 # t.datetime "updated_at",     :null => false
-# t.integer  "media_id"
+# t.string  "media_id"
 # t.string   "format"
-# t.integer  "thumb_media_id"
+# t.string  "thumb_media_id"
 
 class Message < ActiveRecord::Base
   attr_accessible :content, :create_time, :descripton, :event, :event_key, :label, :location_x, :location_y, :msg_id, :msg_type, :open_id, 
