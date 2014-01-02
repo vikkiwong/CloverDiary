@@ -27,7 +27,7 @@ class Question < ActiveRecord::Base
   # 用户某天自问自答的问题
   def self.find_wdquestions(user, date)
     question_ids = UserQuestion.find_all_by_user_id_and_created_on(user.id, date).collect(&:question_id)
-    all_qids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND created_at > #{date} GROUP BY question_id").collect(&:question_id)
+    all_qids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user.id} AND created_at > '#{date}' GROUP BY question_id").collect(&:question_id)
     wd_qids = all_qids.present? ? (all_qids - question_ids) : []
     Question.find_all_by_id(wd_qids)
   end
