@@ -16,8 +16,7 @@ class Answer < ActiveRecord::Base
   	questions.each_with_index do |q, i|
   		str += "【" + (i+1).to_s + "】" + questions[i].content + "\n"
       user_msgs = questions[i].user_msgs(user_id)
-      p user_msgs
-  		str += user_msgs.collect(&:content).join("\n").truncate(140) + "\n" if user_msgs.present?
+  		str += user_msgs.collect{|m| m.content if m.msg_type == "text"}.join("\n").truncate(140) + "\n" if user_msgs.present?
   	end if questions.present?
   	str
   end
@@ -29,7 +28,7 @@ class Answer < ActiveRecord::Base
     p test
 
     msg_ids = Answer.find_by_sql("SELECT * FROM answers WHERE user_id = #{user_id} AND question_id = 0 AND created_at > '#{date}'").collect(&:message_id)  # 用户某天的自言自语
-    msgs = Message.find_all_by_id(msgs)
-    msgs.collect{|m| m.content.present?}.collect(&:content).truncate(140)	
+    msgs = Message.find_all_by_id(msg_ids)
+    msgs.collect{|m| m.content if m.msg_type == "text"}.join("\n").truncate(140)if msgs.present?
   end
 end

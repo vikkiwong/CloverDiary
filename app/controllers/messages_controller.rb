@@ -59,7 +59,7 @@ class MessagesController < ApplicationController
       @title = "今天的三叶草日记"
       @url = SITE_DOMAIN + '/users/' + user.id.to_s
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
-      if Answer.get_whispered(user_id, Date.today).present? 
+      if Answer.get_whispered(user.id, Date.today).present? 
         @text += "\n\n---------我的自言自语----------"
         @text += Answer.get_whispered(user_id, Date.today) # 自言自语
       end
