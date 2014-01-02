@@ -85,6 +85,7 @@ class MessagesController < ApplicationController
     else
       if user.current_qid.present? && user.current_qid > 0
         Answer.create(user_id: user.id, message_id: message.id, question_id: user.current_qid) if message.present?
+        @text = Message::Infos[:saved]
       else
         @text = Message::Infos[:unknowQ]
       end
