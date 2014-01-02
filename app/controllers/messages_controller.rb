@@ -51,7 +51,7 @@ class MessagesController < ApplicationController
       end
 
     # current_id 在问题列表中，且不是最后一题，则跳转到下一题
-    elsif message.msg_type == "text" && message.content == "n" &&  qid_index.present? && qid_index >= 0 && qid_index < q_count
+    elsif message.msg_type == "text" && message.content == "n" &&  qid_index.present? && qid_index >= 0 && qid_index < q_count - 1
       @text = questions[qid_index+1].content and current_qid = questions[qid_index+1].id
 
     # 其他情况输入n，跳到问题列表
