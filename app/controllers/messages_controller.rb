@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
     message = Message.create(user_id: user.id, open_id: params[:xml][:FromUserName], create_time: params[:xml][:CreateTime], msg_type: params[:xml][:MsgType], 
                              msg_id: params[:xml][:MsgId], content: params[:xml][:Content], event: params[:xml][:Event], event_key: params[:xml][:EventKey], 
                              ticket: params[:xml][:Ticket], pic_url: params[:xml][:PicUrl], media_id: params[:xml][:MediaId], format: params[:xml][:Format],
-                             thumb_media_id: params[:xml][:ThumbMediaId], localtion_x: params[:xml][:Location_X], localtion_y: params[:xml][:Location_Y],
+                             thumb_media_id: params[:xml][:ThumbMediaId], location_x: params[:xml][:Location_X], location_y: params[:xml][:Location_Y],
                              scale: params[:xml][:Scale], label: params[:xml][:Label], title: params[:xml][:Title], description: params[:xml][:Description],
                              url: params[:xml][:Url])
     # 更新用户关注状态
