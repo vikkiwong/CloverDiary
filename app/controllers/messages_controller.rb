@@ -91,6 +91,7 @@ class MessagesController < ApplicationController
       end
     end
 
+    user.current_qid = current_qid and user.save  if current_qid.present? 
     layout = ( type == "picmsg") ? "picmsg" : "text"
     render layout, :formats => :xml
 
