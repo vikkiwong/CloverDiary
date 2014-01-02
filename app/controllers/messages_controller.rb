@@ -40,7 +40,7 @@ class MessagesController < ApplicationController
       @text = Message::Infos[:sayHi]
     
     # 菜单点击 
-    elsif message.msg_type == "event" && message.event == "click"
+    elsif message.msg_type == "event" && message.event == "CLICK"
       case message.event_key 
       when "CLICK_1"  # 今日记
         @text = sys_questions[0].content and current_qid = sys_questions[0].id
