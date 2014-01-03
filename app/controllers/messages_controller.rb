@@ -24,7 +24,6 @@ class MessagesController < ApplicationController
   private
   # 处理微信消息
   def msg_handler(user, params, message)
-    content = message.content.downcase if message.content.present?
     sys_questions = Question.find_sys_questions(user.id, Date.today)  # 系统生成的问题
     self_questions = Question.find_self_questions(user.id, Date.today) # 自己提的问题
 
@@ -51,11 +50,11 @@ class MessagesController < ApplicationController
       end
 
     # current_id 在问题列表中，且不是最后一题，则跳转到下一题
-    elsif message.msg_type == "text" && message.content == "n" &&  qid_index.present? && qid_index >= 0 && qid_index < q_count - 1
+    elsif message.msg_type == "text" && message.content.downcase == "n" &&  qid_index.present? && qid_index >= 0 && qid_index < q_count - 1
       @text = questions[qid_index+1].content and current_qid = questions[qid_index+1].id
 
     # 其他情况输入n，跳到问题列表
-    elsif message.msg_type == "text" && message.content == "n"
+    elsif message.msg_type == "text" && message.content.downcase == "n"
       @title = "今天的小宝日记"
       @url = SITE_DOMAIN + '/users/' + user.id.to_s
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
@@ -66,7 +65,7 @@ class MessagesController < ApplicationController
       current_qid = 0 and type = "picmsg"
 
     # 输入q，且上一条消息是点击了自问自答或者自言自语，则取消自问自答或自言自语
-    elsif message.msg_type == "text" && message.content == "q" && (last_msg = Message.last_msg(user.id)).present? && ["CLICK_3", "CLICK_2"].include?(last_msg.event_key)
+    elsif message.msg_type == "text" && message.content.downcase == "q" && (last_msg = Message.last_msg(user.id)).present? && ["CLICK_3", "CLICK_2"].include?(last_msg.event_key)
       @text = Message::Infos[:cancle] and current_qid = 0
 
     # 输入数字选择题目
