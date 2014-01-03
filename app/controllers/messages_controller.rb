@@ -32,7 +32,7 @@ class MessagesController < ApplicationController
     qid_index = questions.collect(&:id).index(user.current_qid) # 当前在第几道题目, nil表示不在其中
     q_count = questions.count # 当前问题数量
 
-    # user.current_qid  >0：question.id, -2：自问自答 -3：自言自语
+    # user.current_qid含义  >0：在回答问题状态(question.id)， 0：不在回答问题状态， -1：自言自语
     # 关注
     if message.msg_type == "event" && ["subscribe", "unsubscribe"].include?(message.event)  
       tag = (message.event == "subscribe")  # true or false
@@ -56,7 +56,7 @@ class MessagesController < ApplicationController
 
     # 其他情况输入n，跳到问题列表
     elsif message.msg_type == "text" && message.content == "n"
-      @title = "今天的三叶草日记"
+      @title = "今天的小宝日记"
       @url = SITE_DOMAIN + '/users/' + user.id.to_s
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
       if Answer.get_whispered(user.id, Date.today).present? 
