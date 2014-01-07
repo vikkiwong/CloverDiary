@@ -6,13 +6,16 @@
 		<div style="padding-bottom:15px;">
 			<% l[1].each do |msg| %>
 				<% if msg.present? && ["image", "text"].include?(msg.msg_type) %>
-					<div>
-						<p class="text-muted" style="float:left; margin-right: 10px;"><%= shown_time_hm(msg.created_at) if msg.present? %></p>
-						<% if msg.msg_type == "image" %>
-							<img src="<%= msg.pic_url %>">
-						<% else msg.msg_type == "text" %>
-				 			<p class="text-muted"><%= msg.content  %></p>
-				 		<% end %>
+					<div class="media">
+						<p class="text-muted pull-left"><%= shown_time_hm(msg.created_at) if msg.present? %></p>
+						<div class="media-body">
+							<% if msg.msg_type == "image" %>
+								<img src="<%= msg.pic_url %>" style="max-width: 238px;">
+							<% else msg.msg_type == "text" %>
+					 			<p class="text-muted"><%= msg.content  %></p>
+					 		<% end %>
+						</div>
+
 				 	</div>
 				<% end %>
 			<% end if l[1].present? %>
@@ -23,14 +26,16 @@
 	<hr>
 	<% @w_msgs[1].each do |msg| %>
 		<% if msg.present? && ["image", "text"].include?(msg.msg_type) %>
-		<div>
-			<p class="text-muted" style="float:left; margin-right: 10px;"><%= shown_time_hm(msg.created_at) if msg.present? %></p>
-			<% if msg.msg_type == "image" %>
-				<img src="<%= msg.pic_url %>">
-			<% else %>
-			 	<p class="text-muted"><%= msg.content  %></p>
-			<% end %>
-		</div>
+			<div class="media">
+				<p class="text-muted pull-left"><%= shown_time_hm(msg.created_at) if msg.present? %></p>
+				<div class="media-body">
+					<% if msg.msg_type == "image" %>
+						<img src="<%= msg.pic_url %>" style="max-width: 238px;">
+					<% else %>
+						<p class="text-muted"><%= msg.content  %></p>
+					<% end %>
+				</div>
+			</div>
 		<% end %>
 	<% end if @w_msgs.present? && @w_msgs[1].present? %>
 </div>
