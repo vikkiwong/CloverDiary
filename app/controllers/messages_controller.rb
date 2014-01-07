@@ -56,7 +56,7 @@ class MessagesController < ApplicationController
     # 其他情况输入n，跳到问题列表
     elsif message.msg_type == "text" && message.content.downcase == "n"
       @title = "今天的小宝日记"
-      @url = SITE_DOMAIN + '/users/' + user.id.to_s# + "?open_id=" + user.open_id
+      @url = SITE_DOMAIN + '/users/' + user.id.to_s + "?open_id=" + user.open_id
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
       if Answer.get_whispered(user.id, Date.today).present? 
         @text += "\n——————我的自言自语——————\n"
