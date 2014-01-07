@@ -56,10 +56,10 @@ class MessagesController < ApplicationController
     # 其他情况输入n，跳到问题列表
     elsif message.msg_type == "text" && message.content.downcase == "n"
       @title = "今天的小宝日记"
-      @url = SITE_DOMAIN + '/users/' + user.id.to_s
+      @url = SITE_DOMAIN + '/users/' + user.id.to_s# + "?open_id=" + user.open_id
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
       if Answer.get_whispered(user.id, Date.today).present? 
-        @text += "\n---------我的自言自语----------\n"
+        @text += "\n————————————我的自言自语————————————\n"
         @text += Answer.get_whispered(user.id, Date.today) # 自言自语
       end
       current_qid = 0 and type = "picmsg"
@@ -79,7 +79,7 @@ class MessagesController < ApplicationController
 
     # 保存自问的问题
     elsif message.msg_type == "text" && (last_msg = Message.last_msg(user.id)).present? && last_msg.event_key == "CLICK_2"
-      question = Question.create(content: content, user_id: user.id)
+      question = Question.create(content: message.content, user_id: user.id)
       UserQuestion.create(user_id: user.id, question_id: question.id, created_on: Date.today, qtype: "self")
       current_qid = question.id and @text = Message::Infos[:wSaved]  
 
