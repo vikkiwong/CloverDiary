@@ -59,7 +59,7 @@ class MessagesController < ApplicationController
       @url = SITE_DOMAIN + '/users/' + user.id.to_s# + "?open_id=" + user.open_id
       @text = Answer.get_answers_string(user.id, questions) # 系统问题 + 自问自答
       if Answer.get_whispered(user.id, Date.today).present? 
-        @text += "\n————————————我的自言自语————————————\n"
+        @text += "\n——————我的自言自语——————\n"
         @text += Answer.get_whispered(user.id, Date.today) # 自言自语
       end
       current_qid = 0 and type = "picmsg"
