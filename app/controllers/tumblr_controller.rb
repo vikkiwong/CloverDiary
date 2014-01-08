@@ -17,14 +17,16 @@ class TumblrController < ApplicationController
 		# p JSON.parse(resp)["response"]
 
 		# # post 示例
-		# request_token_url = "https://www.tumblr.com/oauth/access_token"
-		# request_token_uri = URI.parse(request_token_url)
-		# http = Net::HTTP.new(request_token_uri.host, request_token_uri.port)
-		# http.use_ssl = true
-		# request = Net::HTTP::Post.new(request_token_uri.path, {'Content-Type' =>'application/json'})
-		# request.body = {x_auth_username: "cloverdiary1314@gmail.com", x_auth_password: "clover1314", x_auth_mode: "client_auth"}.to_json
-		# response = http.request(request)
-		# p response
+		api_key = "tSXD9tLCnN0Zqrl0M0fRTX61kkDMa1zVQgLXP7N6PRzKzc1vbJ"
+		hostname = "cloverdiray.tumblr.com"
+		url = "http://api.tumblr.com/v2/blog/" + hostname + "/post"
+		uri = URI.parse(url)
+		http = Net::HTTP.new(uri.host, uri.port)
+		#http.use_ssl = true
+		request = Net::HTTP::Post.new(uri.path, {'Content-Type' =>'application/json'})
+		request.body = {type: "text", title: "测试", body: "测试"}.to_json
+		response = http.request(request)
+		p response
 	end
 
 	def create
