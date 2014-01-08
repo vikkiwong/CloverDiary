@@ -5,7 +5,9 @@ CloverDiary::Application.routes.draw do
   resources :questions
   resources :users, :only => :show
   resources :menu
+  resources :tumblr
   
+  root :to => 'questions#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

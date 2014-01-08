@@ -1,4 +1,3 @@
-# encoding: utf-8
 class MessagesController < ApplicationController
 	before_filter :check_wx_legality, :only => "create"
 

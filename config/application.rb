@@ -67,3 +67,19 @@ WX_TOKEN = WECHAT_SETTINGS["wx_token"]
 SITE_DOMAIN = WECHAT_SETTINGS["site_domain"]
 APP_ID = WECHAT_SETTINGS["app_id"]
 APP_SECRET = WECHAT_SETTINGS["app_secret"]
+
+CONSUMER_KEY = "tSXD9tLCnN0Zqrl0M0fRTX61kkDMa1zVQgLXP7N6PRzKzc1vbJ"
+CONSUMER_SECRET = "TLMLM3JZJsDw4SjTSPeuCX908VYFY9Gox2b1ThCnpkBtwOjub5"
+TOKEN = "LE7dvjDEL7BaiROOXvf7P9md1rMYiYnBs1KiesPciIIYjQgnXR"
+TOKEN_SECRET = "vLzuvrEMtN4a3KEy0fme4xU4xLoAtsL6tZc9BrsKJfP1wOggpN"
+
+REQUEST_TOKEN_URL = "http://www.tumblr.com/oauth/request_token"
+AUTHORIZATION_URL = 'http://www.tumblr.com/oauth/authorize'
+ACCESS_TOKEN_URL = 'http://www.tumblr.com/oauth/access_token'
+
+# Tumblr.configure do |config|
+#   config.consumer_key = 'tSXD9tLCnN0Zqrl0M0fRTX61kkDMa1zVQgLXP7N6PRzKzc1vbJ',
+#   config.consumer_secret = 'TLMLM3JZJsDw4SjTSPeuCX908VYFY9Gox2b1ThCnpkBtwOjub5',
+#   config.oauth_token = 'ZnPZG6VmFonWaB9y77lXVXDWy3MK9Ed22Ooy6duYVczjTeFVQK',
+#   config.oauth_token_secret = 'JTuVF8gyetPhAB5UpAw7fgdLbECmcnT2zFVpZ0wrMrxGmNLGr9'
+# end
