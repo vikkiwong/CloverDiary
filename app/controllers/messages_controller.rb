@@ -77,16 +77,20 @@ class MessagesController < ApplicationController
 
     # -2 表示需要推送到tumblr账户
     elsif user.current_qid == -2
-      current_qid = -2 and @text = Message::Infos[:saySaved]
-
       # 保存自言自语到tumblr账户, 这个请求比较慢，所以单开进程
       tumblr_account = user.find_account # 查找或创建 tumblr_account
-      Process.fork do 
-        if message.msg_type == "text"
-          tumblr_account.text({body: message.content})
-        elsif message.msg_type == "image"
-          tumblr_account.photo({source: message.pic_url})
-        end    
+
+      if tumblr_account.present?
+        current_qid = -2 and @text = Message::Infos[:saySaved]
+        Process.fork do 
+          if message.msg_type == "text"
+            tumblr_account.text({body: message.content})
+          elsif message.msg_type == "image"
+            tumblr_account.photo({source: message.pic_url})
+          end    
+        end
+      else # 提示账户不足
+        @text = Message::Infos[:notEnough]
       end
 
     # -1表示自言自语状态，保存自言自语

@@ -40,7 +40,8 @@ class Message < ActiveRecord::Base
     zSaved: "已保存，回复【N】结束，否则继续自言自语",
     # Tumblr
     saySth: "说点什么吧，我们会将您的文字和图片妥善保存的~",
-    saySaved: "已保存，回复【N】结束，否则继续"
+    saySaved: "已保存，回复【N】结束，否则继续",
+    notEnough: "Tumblr账户不足，请联系管理员！"
   }
 
   # 当前用户回答的问题序号
