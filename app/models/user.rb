@@ -42,6 +42,7 @@ class User < ActiveRecord::Base
       return nil unless tumblr_account.present?
       self.tumblr_account_id = tumblr_account.id # 给用户分配tumblr账户
       tumblr_account.active = true and tumblr_account.save if self.save  # 标记该账户已被占用
+      tumblr_account
     end 
   end
 end
