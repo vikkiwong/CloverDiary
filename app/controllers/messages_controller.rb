@@ -10,13 +10,6 @@ class MessagesController < ApplicationController
   def create
   	# 先查找/保存用户
   	user = User.find_or_create_by_open_id(:open_id => params[:xml][:FromUserName])
-    tumblr_account = user.tumblr_account
-    unless tumblr_account.present?
-      tumblr_account = TumblrAccount.where(active: false).first
-      @text = "Tumblr账户不足，请联系管理员" and render "text", :formats => :xml and return unless tumblr_account.present?
-      user.tumblr_account_id = tumblr_account.id # 给用户分配tumblr账户
-      tumblr_account.active = true and tumblr_account.save if user.save  # 标记该账户已被占用
-    end
 
     # 保存消息
     message = Message.create(user_id: user.id, open_id: params[:xml][:FromUserName], create_time: params[:xml][:CreateTime], msg_type: params[:xml][:MsgType], 
@@ -84,7 +77,9 @@ class MessagesController < ApplicationController
     elsif user.current_qid == -1
       Answer.create(user_id: user.id, message_id: message.id, question_id: 0) if message.present?
       current_qid = -1 and @text = Message::Infos[:zSaved] 
+
       # 保存自言自语到tumblr账户, 这个请求比较慢，所以单开进程
+      tumblr_account = user.find_account  # 查找或创建 tumblr_account
       Process.fork do 
         if message.msg_type == "text"
           tumblr_account.text({body: message.content})
