@@ -85,10 +85,10 @@ class MessagesController < ApplicationController
       Answer.create(user_id: user.id, message_id: message.id, question_id: 0) if message.present?
       current_qid = -1 and @text = Message::Infos[:zSaved] 
       # 保存自言自语到tumblr账户, 这个请求比较慢，所以单开进程
-      Process.fork do
-        if messsage.msg_type == "text"
+      Process.fork do 
+        if message.msg_type == "text"
           tumblr_account.text({body: message.content})
-        else
+        elsif message.msg_type == "image"
           tumblr_account.photo({source: message.pic_url})
         end    
       end
