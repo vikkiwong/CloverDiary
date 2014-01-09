@@ -8,6 +8,8 @@
 class User < ActiveRecord::Base
   attr_accessible :open_id, :followed
 
+  belongs_to :tumblr_account
+
   # 用户某天发送的全部消息,用于展示
   # == return ==
   # Array

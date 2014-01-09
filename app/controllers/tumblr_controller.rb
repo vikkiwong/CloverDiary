@@ -3,32 +3,15 @@ require "uri"
 require "net/http"
 require "net/https"
 require "open-uri"
+require 'securerandom'
+require 'base64'
 class TumblrController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 	
 	def index
-		p "*"*10
-		p params
-		# get 示例
-		# api_key = "tSXD9tLCnN0Zqrl0M0fRTX61kkDMa1zVQgLXP7N6PRzKzc1vbJ"
-		# hostname = "cloverdiray.tumblr.com"
-	 	# url = "http://api.tumblr.com/v2/blog/" + hostname + "/info?api_key=" + api_key
-  	# resp = URI.parse(url).read
-		# p JSON.parse(resp)["response"]
-
-		# # post 示例
-		api_key = "tSXD9tLCnN0Zqrl0M0fRTX61kkDMa1zVQgLXP7N6PRzKzc1vbJ"
-		hostname = "cloverdiray.tumblr.com"
-		url = "http://api.tumblr.com/v2/blog/" + hostname + "/post"
-		uri = URI.parse(url)
-		http = Net::HTTP.new(uri.host, uri.port)
-		#http.use_ssl = true
-		request = Net::HTTP::Post.new(uri.path, {'Content-Type' =>'application/json'})
-		request.body = {type: "text", title: "测试", body: "测试"}.to_json
-		response = http.request(request)
-		p response
-	end
-
-	def create
+		account = User.first.tumblr_account#.present?
+		# Process.fork do
+		# 	account.photo({source: "http://www.womenwatch-china.org/UpFileList/image/%E8%A5%BF%E8%92%99%C2%B7%E6%B3%A2%E5%A8%83.jpg"})
+		# end
 	end
 end

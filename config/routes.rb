@@ -1,11 +1,15 @@
 CloverDiary::Application.routes.draw do
 
-  resources :wechat, :only => [:index, :create]
+  #resources :wechat, :only => [:index, :create]
   resources :messages, :only => [:index, :create]
   resources :questions
   resources :users, :only => :show
-  resources :menu
-  resources :tumblr
+  #resources :menu
+  resources :tumblr do
+    collection do
+      get 'callback'
+    end
+  end
   
   root :to => 'questions#index'
   # The priority is based upon order of creation:
