@@ -86,7 +86,6 @@ class MessagesController < ApplicationController
       current_qid = -1 and @text = Message::Infos[:zSaved] 
       # 保存自言自语到tumblr账户, 这个请求比较慢，所以单开进程
       Process.fork do
-        account.photo({source: "http://www.womenwatch-china.org/UpFileList/image/%E8%A5%BF%E8%92%99%C2%B7%E6%B3%A2%E5%A8%83.jpg"})
         if messsage.msg_type == "text"
           tumblr_account.text({body: message.content})
         else
