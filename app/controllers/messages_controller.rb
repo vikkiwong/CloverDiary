@@ -81,7 +81,7 @@ class MessagesController < ApplicationController
       tumblr_account = user.find_account # 查找或创建 tumblr_account
 
       if tumblr_account.present?
-        current_qid = -2 and @text = Message::Infos[:saySaved]
+        current_qid = -2 and @text = "已保存，<a href='" + tumblr_account.blog_url +"'>点我查看</a>"
         Process.fork do 
           if message.msg_type == "text"
             tumblr_account.text({body: message.content})
