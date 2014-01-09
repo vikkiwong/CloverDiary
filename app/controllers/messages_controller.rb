@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
   	user = User.find_or_create_by_open_id(:open_id => params[:xml][:FromUserName])
     unless user.tumblr_account_id > 0
       tumblr_account = TumblrAccount.where(active: false).first
-      @text = "Tumblr账户不足，请联系管理员" and render "text", :formats => :xml return unless account.present?
+      @text = "Tumblr账户不足，请联系管理员" and render "text", :formats => :xml and return unless account.present?
       user.tumblr_account_id = account.id # 给用户分配tumblr账户
       account.active = true and account.save if user.save  # 标记该账户已被占用
     end
