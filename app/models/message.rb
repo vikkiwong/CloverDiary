@@ -37,7 +37,10 @@ class Message < ActiveRecord::Base
     wdSaved: "问答已经保存\n回复【N】结束，否则继续回答本题",
     # 自言自语
     zStart: "可以开始自言自语啦",
-    zSaved: "已保存，回复【N】结束，否则继续自言自语"
+    zSaved: "已保存，回复【N】结束，否则继续自言自语",
+    # Tumblr
+    saySth: "说点什么吧，我们会将您的文字和图片妥善保存的~",
+    saySaved: "已保存，回复【N】结束，否则继续"
   }
 
   # 当前用户回答的问题序号

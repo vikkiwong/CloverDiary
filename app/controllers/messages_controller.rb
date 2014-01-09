@@ -32,7 +32,7 @@ class MessagesController < ApplicationController
     qid_index = questions.collect(&:id).index(user.current_qid) # 当前在第几道题目, nil表示不在其中
     q_count = questions.count # 当前问题数量
 
-    # user.current_qid含义  >0：在回答问题状态(question.id)， 0：不在回答问题状态， -1：自言自语
+    # user.current_qid含义  >0：在回答问题状态(question.id)， 0：不在回答问题状态， -1：自言自语, -2：推送tumblr
     # 关注
     if message.msg_type == "event" && ["subscribe", "unsubscribe"].include?(message.event)  
       tag = (message.event == "subscribe")  # true or false
@@ -48,6 +48,8 @@ class MessagesController < ApplicationController
         @text = Message::Infos[:newQ] and current_qid = 0
       when "CLICK_3"  # 自言自语
         @text = Message::Infos[:zStart] and current_qid = -1
+      when "CLICK_4"
+        @text = Message::Infos[:saySth] and current_qid = -2
       end
 
     # current_id 在问题列表中，且不是最后一题，则跳转到下一题
@@ -66,20 +68,19 @@ class MessagesController < ApplicationController
       current_qid = 0 and type = "picmsg"
 
     # 输入q，且上一条消息是点击了自问自答或者自言自语，则取消自问自答或自言自语
-    elsif message.msg_type == "text" && message.content.downcase == "q" && (last_msg = Message.last_msg(user.id)).present? && ["CLICK_3", "CLICK_2"].include?(last_msg.event_key)
+    elsif message.msg_type == "text" && message.content.downcase == "q" && (last_msg = Message.last_msg(user.id)).present? && ["CLICK_3", "CLICK_2", "CLICK_4"].include?(last_msg.event_key)
       @text = Message::Infos[:cancle] and current_qid = 0
 
     # 输入数字选择题目
     elsif message.msg_type == "text" && (i = message.content.to_i) > 0 && i <= q_count
       @text = questions[i-1].content and current_qid = questions[i-1].id
 
-    # -1表示自言自语状态，保存自言自语
-    elsif user.current_qid == -1
-      Answer.create(user_id: user.id, message_id: message.id, question_id: 0) if message.present?
-      current_qid = -1 and @text = Message::Infos[:zSaved] 
+    # -2 表示需要推送到tumblr账户
+    elsif user.current_qid == -2
+      current_qid = -2 and @text = Message::Infos[:saySaved]
 
       # 保存自言自语到tumblr账户, 这个请求比较慢，所以单开进程
-      tumblr_account = user.find_account  # 查找或创建 tumblr_account
+      tumblr_account = user.find_account # 查找或创建 tumblr_account
       Process.fork do 
         if message.msg_type == "text"
           tumblr_account.text({body: message.content})
@@ -87,6 +88,11 @@ class MessagesController < ApplicationController
           tumblr_account.photo({source: message.pic_url})
         end    
       end
+
+    # -1表示自言自语状态，保存自言自语
+    elsif user.current_qid == -1
+      Answer.create(user_id: user.id, message_id: message.id, question_id: 0) if message.present?
+      current_qid = -1 and @text = Message::Infos[:zSaved] 
 
     # 保存自问的问题
     elsif message.msg_type == "text" && (last_msg = Message.last_msg(user.id)).present? && last_msg.event_key == "CLICK_2"
